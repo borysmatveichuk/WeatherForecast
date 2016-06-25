@@ -1,0 +1,48 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "net.borkiss.weatherforecast"
+        minSdkVersion 14
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+//    testOptions {
+//        unitTests.returnDefaultValues = true
+//    }
+
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+//    compile "cglib:cglib:3.2.4"
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.squareup.okhttp3:okhttp:3.3.1'
+
+    testCompile "cglib:cglib:3.2.4"
+//    testCompile 'junit:junit:4.12'
+//    testCompile 'org.mockito:mockito-core:2.0.71-beta'
+//    //compile 'org.powermock:powermock:1.6.5'
+//    //compile 'org.powermock:powermock-module-junit4:1.6.5'
+//    //compile 'org.powermock:powermock-api-mockito:1.6.5'
+//    //compile 'org.powermock:powermock-core:1.6.5'
+//
+    testCompile "org.powermock:powermock:1.6.5"
+    testCompile "org.powermock:powermock-api-mockito:1.6.5"
+    testCompile "org.powermock:powermock-module-junit4:1.6.5"
+    testCompile "org.powermock:powermock-module-junit4-rule:1.6.5"
+    testCompile "org.powermock:powermock-api-mockito:1.6.5"
+    testCompile "org.powermock:powermock-classloading-xstream:1.6.5"
+
+
+}
