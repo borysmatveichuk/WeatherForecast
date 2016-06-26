@@ -4,18 +4,15 @@ import android.util.Log;
 
 import java.io.IOException;
 
-/**
- * Created by Boris on 25.06.2016.
- */
 public class WeatherApi extends WeatherRestAbs {
 
     private static final String TAG = WeatherApi.class.getSimpleName();
 
-    public void getCurrentWeather() {
+    public void getCurrentWeather(final int cityId) {
         Runnable task = new Runnable() {
             @Override
             public void run() {
-                final HTTPResult result = doGet(URIBuildHelper.createUriCurrentWeather(700569));
+                final HTTPResult result = doGet(URIBuildHelper.createUriCurrentWeather(cityId));
 
                 switch (result.getHttpCode()) {
                     case 200:

@@ -26,11 +26,24 @@ public class URIBuildHelper {
 
     private static final String KEY_CURRENT_WEATHER = "weather";
     private static final String KEY_FIVE_DAY_WEATHER = "forecast";
+    private static final String KEY_FIND = "find";
+    private static final String KEY_SEARCH_PARAM = "type";
     private static final String KEY_CITY_NAME = "q";
     private static final String KEY_LATITUDE = "lat";
     private static final String KEY_LONGITUDE = "lon";
     private static final String KEY_CITY_ID = "q";
     private static final String KEY_API_ID = "appid";
+
+    private static final String VALUE_SEARCH_PARAM_LIKE = "like";
+
+    public static String createUriFindCityByName(String cityName) {
+        return createCommonUri()
+                .appendEncodedPath(KEY_FIND)
+                .appendQueryParameter(KEY_CITY_NAME, cityName)
+                .appendQueryParameter(KEY_SEARCH_PARAM, VALUE_SEARCH_PARAM_LIKE)
+                .appendQueryParameter(KEY_API_ID, API_KEY)
+                .toString();
+    }
 
     public static String createUriCurrentWeather(String cityName) {
         return createCommonUri()
