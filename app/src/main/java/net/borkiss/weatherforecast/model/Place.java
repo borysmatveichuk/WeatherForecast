@@ -1,6 +1,10 @@
 package net.borkiss.weatherforecast.model;
 
-public class Place {
+import java.io.Serializable;
+
+public class Place implements Serializable {
+
+    private static final long serialVersionUID = -5963581202041078412L;
 
     private String name;
     private int id;
