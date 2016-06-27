@@ -104,7 +104,7 @@ public class DatabaseTest {
         dto.setPlaceId(111);
 
         ForecastFiveDayDTO dto2 = new ForecastFiveDayDTO();
-        dto2.setDocument("dto2");
+        dto2.setDocument("{\"coord\":{\"lon\":32,\"lat\":46.97},\"weather\":[{\"id\":500,\"main\":\"Rain\",\"description\":\"light rain\",\"icon\":\"10n\"}],\"base\":\"stations\",\"main\":{\"temp\":297.915,\"pressure\":1014.89,\"humidity\":76,\"temp_min\":297.915,\"temp_max\":297.915,\"sea_level\":1018.96,\"grnd_level\":1014.89},\"wind\":{\"speed\":2.67,\"deg\":27.5058},\"rain\":{\"3h\":0.675},\"clouds\":{\"all\":76},\"dt\":1467067225,\"sys\":{\"message\":0.0382,\"country\":\"UA\",\"sunrise\":1466992774,\"sunset\":1467049855},\"id\":700569,\"name\":\"Mykolayiv\",\"cod\":200}");
         dto2.setTime(2222L);
         dto2.setPlaceId(222);
 
@@ -116,7 +116,7 @@ public class DatabaseTest {
 
         assertThat(list.size(), is(2));
 
-        assertTrue(list.get(1).getDocument().equals("dto2"));
+        assertTrue(list.get(1).getDocument().subSequence(33, 40).equals("weather"));
         assertThat(list.get(1).getTime(), is(2222L));
         assertThat(list.get(1).getPlaceId(), is(222));
 
