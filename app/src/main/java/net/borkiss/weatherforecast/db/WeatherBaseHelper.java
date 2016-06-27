@@ -23,7 +23,7 @@ public class WeatherBaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("create table " + PlacesTable.NAME + "(" +
                 " _id integer primary key autoincrement, " +
                 PlacesTable.Cols.NAME + ", " +
-                PlacesTable.Cols.ID + ", " +
+                PlacesTable.Cols.CITY_ID + ", " +
                 PlacesTable.Cols.COUNTRY + ", " +
                 PlacesTable.Cols.COORD_LON + ", " +
                 PlacesTable.Cols.COORD_LAT +
@@ -32,7 +32,7 @@ public class WeatherBaseHelper extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL("create table " + CurrentWeatherTable.NAME + "(" +
                 " _id integer primary key autoincrement, " +
-                CurrentWeatherTable.Cols.PLACE + ", " +
+                CurrentWeatherTable.Cols.PLACE_ID + ", " +
                 CurrentWeatherTable.Cols.TIME + ", " +
                 CurrentWeatherTable.Cols.DOCUMENT +
                 ")"
@@ -40,7 +40,7 @@ public class WeatherBaseHelper extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL("create table " + ForecastFiveDayTable.NAME + "(" +
                 " _id integer primary key autoincrement, " +
-                ForecastFiveDayTable.Cols.PLACE + ", " +
+                ForecastFiveDayTable.Cols.PLACE_ID + ", " +
                 ForecastFiveDayTable.Cols.TIME + ", " +
                 ForecastFiveDayTable.Cols.DOCUMENT +
                 ")"
