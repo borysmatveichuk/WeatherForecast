@@ -100,6 +100,23 @@ public class WeatherStation {
             cursor.close();
         }
 
+        places = getTestPlaces();
+
+        return places;
+    }
+
+    private List<Place> getTestPlaces() {
+        List<Place> places = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            Place place = new Place();
+            place.setId(i);
+            place.setName("Place " + i);
+            place.setCountry("UA");
+            place.setLatitude(123.456f);
+            place.setLongitude(456.789f);
+
+            places.add(place);
+        }
         return places;
     }
 
