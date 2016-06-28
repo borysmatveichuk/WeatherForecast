@@ -3,6 +3,8 @@ package net.borkiss.weatherforecast.ui;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -51,5 +53,11 @@ public class MainActivity extends AppCompatActivity {
 //
 //        WeatherStation weatherStation = WeatherStation.getInstance(this);
 //        Toast.makeText(this, "WS " + weatherStation.toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 }
