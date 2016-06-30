@@ -1,14 +1,12 @@
 package net.borkiss.weatherforecast.fragment;
 
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,11 +18,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.borkiss.weatherforecast.R;
+import net.borkiss.weatherforecast.adapter.PlaceAdapter;
 import net.borkiss.weatherforecast.api.ApiCallback;
 import net.borkiss.weatherforecast.api.ApiError;
 import net.borkiss.weatherforecast.api.WeatherApi;
 import net.borkiss.weatherforecast.dto.PlaceDTO;
-import net.borkiss.weatherforecast.util.WeatherApplication;
 
 import java.util.List;
 
@@ -33,7 +31,8 @@ public class PlaceListFragment extends Fragment implements ApiCallback<List<Plac
     private static final String TAG = PlaceListFragment.class.getSimpleName();
     private Handler handler = new Handler(Looper.getMainLooper());
 
-    private TextView textView;
+    private RecyclerView recyclerView;
+    private PlaceAdapter adapter;
 
     public static PlaceListFragment newInstance() {
 
@@ -60,7 +59,8 @@ public class PlaceListFragment extends Fragment implements ApiCallback<List<Plac
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        textView = (TextView) view.findViewById(R.id.txtPlace);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     @Override
@@ -81,7 +81,6 @@ public class PlaceListFragment extends Fragment implements ApiCallback<List<Plac
             @Override
             public boolean onQueryTextChange(String s) {
                 Log.d(TAG, "QueryTextChange: " + s);
-                textView.setText(s);
                 return false;
             }
         });
@@ -100,10 +99,8 @@ public class PlaceListFragment extends Fragment implements ApiCallback<List<Plac
                 if (getActivity() == null)
                     return;
 
-                PlaceDTO placeDTO = result.get(0);
-                textView.setText(placeDTO.getName() + " " +
-                placeDTO.getId() + " " +
-                placeDTO.getCountry());
+                adapter = new PlaceAdapter(getActivity(), result);
+                recyclerView.setAdapter(adapter);
             }
         });
     }
