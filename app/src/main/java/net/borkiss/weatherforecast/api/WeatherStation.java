@@ -100,9 +100,28 @@ public class WeatherStation {
             cursor.close();
         }
 
-        places = getTestPlaces();
+        //places = getTestPlaces();
 
         return places;
+    }
+
+    public Place getPlaceByCityId(int cityId) {
+
+        PlaceCursorWrapper cursor = queryPlaces(
+                PlacesTable.Cols.CITY_ID + " = " + cityId,
+                null
+        );
+
+        try {
+            if (cursor.getCount() == 0)
+                return null;
+
+            cursor.moveToFirst();
+            return cursor.getPlace();
+        } finally {
+            cursor.close();
+        }
+
     }
 
     private List<Place> getTestPlaces() {

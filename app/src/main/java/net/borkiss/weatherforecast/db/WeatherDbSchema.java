@@ -26,7 +26,7 @@ public class WeatherDbSchema {
 
         public static final class Cols {
             public static final String NAME = "name";
-            public static final String CITY_ID = "id";
+            public static final String CITY_ID = "cityId";
             public static final String COUNTRY = "country";
             public static final String COORD_LON = "coordLon";
             public static final String COORD_LAT = "coordLat";

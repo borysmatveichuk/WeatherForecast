@@ -22,7 +22,9 @@ import net.borkiss.weatherforecast.adapter.PlaceAdapter;
 import net.borkiss.weatherforecast.api.ApiCallback;
 import net.borkiss.weatherforecast.api.ApiError;
 import net.borkiss.weatherforecast.api.WeatherApi;
+import net.borkiss.weatherforecast.dto.DTOFactory;
 import net.borkiss.weatherforecast.dto.PlaceDTO;
+import net.borkiss.weatherforecast.model.Place;
 
 import java.util.List;
 
@@ -99,7 +101,8 @@ public class PlaceListFragment extends Fragment implements ApiCallback<List<Plac
                 if (getActivity() == null)
                     return;
 
-                adapter = new PlaceAdapter(getActivity(), result);
+                List<Place> places = DTOFactory.INSTANCE.createPlaces(result);
+                adapter = new PlaceAdapter(getActivity(), places);
                 recyclerView.setAdapter(adapter);
             }
         });
