@@ -4,6 +4,8 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
@@ -18,10 +20,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.borkiss.weatherforecast.R;
+import net.borkiss.weatherforecast.api.ApiCallback;
+import net.borkiss.weatherforecast.api.ApiError;
+import net.borkiss.weatherforecast.api.WeatherApi;
+import net.borkiss.weatherforecast.dto.PlaceDTO;
+import net.borkiss.weatherforecast.util.WeatherApplication;
 
-public class PlaceListFragment extends Fragment {
+import java.util.List;
+
+public class PlaceListFragment extends Fragment implements ApiCallback<List<PlaceDTO>> {
 
     private static final String TAG = PlaceListFragment.class.getSimpleName();
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     private TextView textView;
 
@@ -64,6 +74,7 @@ public class PlaceListFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 Log.d(TAG, "QueryTextSubmit: " + s);
+                new WeatherApi().getPlacesByName(s, PlaceListFragment.this);
                 return true;
             }
 
@@ -77,4 +88,28 @@ public class PlaceListFragment extends Fragment {
 
     }
 
+    @Override
+    public void onSuccess(final List<PlaceDTO> result) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+
+                if (result == null)
+                    return;
+
+                if (getActivity() == null)
+                    return;
+
+                PlaceDTO placeDTO = result.get(0);
+                textView.setText(placeDTO.getName() + " " +
+                placeDTO.getId() + " " +
+                placeDTO.getCountry());
+            }
+        });
+    }
+
+    @Override
+    public void onError(final ApiError error) {
+
+    }
 }

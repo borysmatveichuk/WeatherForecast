@@ -3,6 +3,7 @@ package net.borkiss.weatherforecast.api;
 import android.util.Log;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -14,6 +15,8 @@ public class WeatherRestAbs  implements HTTPMethodInvoker {
 
     private final static String TAG = WeatherRestAbs.class.getSimpleName();
     protected static final int IO_EXCEPTION_ERROR = -2;
+
+    protected static final int HTTP_OK = HttpURLConnection.HTTP_OK;
 
     protected static final ExecutorService execService = Executors.newCachedThreadPool();
 
