@@ -1,13 +1,10 @@
 package net.borkiss.weatherforecast;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import net.borkiss.weatherforecast.api.WeatherStation;
 import net.borkiss.weatherforecast.db.WeatherBaseHelper;
-import net.borkiss.weatherforecast.db.WeatherDbSchema;
 import net.borkiss.weatherforecast.model.CurrentWeatherDTO;
 import net.borkiss.weatherforecast.model.ForecastFiveDayDTO;
 import net.borkiss.weatherforecast.model.Place;
@@ -28,11 +25,18 @@ import static org.junit.Assert.assertTrue;
 
 public class DatabaseTest {
 
+    private static final String TAG = DatabaseTest.class.getSimpleName();
+
     private WeatherStation sqLiteDatabase;
 
     @Before
     public void setUp() throws Exception {
-        getTargetContext().deleteDatabase(WeatherBaseHelper.DATABASE_NAME);
+
+        if (getTargetContext().deleteDatabase(WeatherBaseHelper.DATABASE_NAME))
+            Log.d(TAG, "DB deleted");
+        else
+            Log.e(TAG, "Can't delete DB");
+
         sqLiteDatabase = WeatherStation.getInstance(getTargetContext());
     }
 
@@ -68,6 +72,9 @@ public class DatabaseTest {
             assertThat(p.getLatitude(), is(123.456f));
             assertThat(p.getLongitude(), is(789.012f));
         }
+
+        Place placeFromDB = sqLiteDatabase.getPlaceByCityId(123456);
+        assertThat(placeFromDB.getId(), is(123456));
 
     }
 
