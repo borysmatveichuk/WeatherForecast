@@ -2,5 +2,7 @@
     <string name="app_name">Weather Forecast</string>
     <string name="find_city">Find city</string>
     <string name="add_city">Add city</string>
+    <string name="edit">Edit</string>
+    <string name="add">Add</string>
     <string name="about">About</string>
 </resources>
