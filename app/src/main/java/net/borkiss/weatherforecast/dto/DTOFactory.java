@@ -13,7 +13,7 @@ public enum DTOFactory {
             return null;
 
         Place place = new Place();
-        place.setId(dto.getId());
+        place.setCityId(dto.getCityId());
         place.setName(dto.getName());
         place.setCountry(dto.getCountry());
         place.setLatitude(dto.getLatitude());

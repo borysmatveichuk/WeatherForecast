@@ -5,8 +5,8 @@ import android.util.Log;
 
 import net.borkiss.weatherforecast.api.WeatherStation;
 import net.borkiss.weatherforecast.db.WeatherBaseHelper;
-import net.borkiss.weatherforecast.model.CurrentWeatherDTO;
-import net.borkiss.weatherforecast.model.ForecastFiveDayDTO;
+import net.borkiss.weatherforecast.dto.CurrentWeatherDTO;
+import net.borkiss.weatherforecast.dto.ForecastFiveDayDTO;
 import net.borkiss.weatherforecast.model.Place;
 
 import org.junit.After;
@@ -57,7 +57,7 @@ public class DatabaseTest {
         Place place = new Place();
         place.setName("Nikolaev");
         place.setCountry("UA");
-        place.setId(123456);
+        place.setCityId(123456);
         place.setLatitude(123.456f);
         place.setLongitude(789.012f);
 
@@ -68,13 +68,13 @@ public class DatabaseTest {
             assertTrue(p.getName().equals("Nikolaev"));
             assertTrue(p.getCountry().equals("UA"));
 
-            assertThat(p.getId(), is(123456));
+            assertThat(p.getCityId(), is(123456));
             assertThat(p.getLatitude(), is(123.456f));
             assertThat(p.getLongitude(), is(789.012f));
         }
 
         Place placeFromDB = sqLiteDatabase.getPlaceByCityId(123456);
-        assertThat(placeFromDB.getId(), is(123456));
+        assertThat(placeFromDB.getCityId(), is(123456));
 
     }
 

@@ -7,7 +7,7 @@ public class Place implements Serializable {
     private static final long serialVersionUID = -5963581202041078412L;
 
     private String name;
-    private int id;
+    private int cityId;
     private String country;
     private float longitude;
     private float latitude;
@@ -20,12 +20,12 @@ public class Place implements Serializable {
         this.name = name;
     }
 
-    public int getId() {
-        return id;
+    public int getCityId() {
+        return cityId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCityId(int id) {
+        this.cityId = id;
     }
 
     public String getCountry() {

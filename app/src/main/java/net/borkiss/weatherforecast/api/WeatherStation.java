@@ -12,8 +12,8 @@ import net.borkiss.weatherforecast.db.WeatherBaseHelper;
 import net.borkiss.weatherforecast.db.WeatherDbSchema.CurrentWeatherTable;
 import net.borkiss.weatherforecast.db.WeatherDbSchema.ForecastFiveDayTable;
 import net.borkiss.weatherforecast.db.WeatherDbSchema.PlacesTable;
-import net.borkiss.weatherforecast.model.CurrentWeatherDTO;
-import net.borkiss.weatherforecast.model.ForecastFiveDayDTO;
+import net.borkiss.weatherforecast.dto.CurrentWeatherDTO;
+import net.borkiss.weatherforecast.dto.ForecastFiveDayDTO;
 import net.borkiss.weatherforecast.model.Place;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class WeatherStation {
     private static ContentValues getPlaceContentValues(Place place) {
         ContentValues values = new ContentValues();
         values.put(PlacesTable.Cols.NAME, place.getName());
-        values.put(PlacesTable.Cols.CITY_ID, place.getId());
+        values.put(PlacesTable.Cols.CITY_ID, place.getCityId());
         values.put(PlacesTable.Cols.COUNTRY, place.getCountry());
         values.put(PlacesTable.Cols.COORD_LAT, place.getLatitude());
         values.put(PlacesTable.Cols.COORD_LON, place.getLongitude());
@@ -100,8 +100,6 @@ public class WeatherStation {
             cursor.close();
         }
 
-        //places = getTestPlaces();
-
         return places;
     }
 
@@ -122,21 +120,6 @@ public class WeatherStation {
             cursor.close();
         }
 
-    }
-
-    private List<Place> getTestPlaces() {
-        List<Place> places = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            Place place = new Place();
-            place.setId(i);
-            place.setName("Place " + i);
-            place.setCountry("UA");
-            place.setLatitude(123.456f);
-            place.setLongitude(456.789f);
-
-            places.add(place);
-        }
-        return places;
     }
 
     public List<CurrentWeatherDTO> getListCurrentWeatherDTO() {

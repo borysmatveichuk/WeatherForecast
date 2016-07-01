@@ -8,7 +8,8 @@ public class PlaceDTO implements Serializable {
 
     private static final long serialVersionUID = -8396561409012387729L;
 
-    private int id;
+    @SerializedName("id")
+    private int cityId;
     private String name;
 
     @SerializedName("coord")
@@ -17,8 +18,8 @@ public class PlaceDTO implements Serializable {
     @SerializedName("sys")
     private Sys sysInfo;
 
-    public int getId() {
-        return id;
+    public int getCityId() {
+        return cityId;
     }
 
     public String getName() {
