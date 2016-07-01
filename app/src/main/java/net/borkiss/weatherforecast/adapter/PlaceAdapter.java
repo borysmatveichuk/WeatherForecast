@@ -18,7 +18,15 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceHolder>
 
     private Context context;
     private List<Place> places;
+    private OnItemClickListener onItemClickListener;
 
+    public interface OnItemClickListener {
+        void onItemClick(View view , int position);
+    }
+
+    public void setOnItemClickListener(final OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     public PlaceAdapter(Context context, List<Place> places) {
         this.context = context;
@@ -42,7 +50,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceHolder>
         return places.size();
     }
 
-    public class PlaceHolder extends RecyclerView.ViewHolder {
+    public class PlaceHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private Place place;
 
@@ -54,15 +62,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceHolder>
 
             placeName = (TextView) itemView.findViewById(R.id.txtPlaceName);
             placeCountry = (TextView) itemView.findViewById(R.id.txtPlaceCountry);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(context, "Place " + place.getName(), Toast.LENGTH_SHORT).show();
-                    if (WeatherStation.getInstance(context).getPlaceByCityId(place.getId()) == null) {
-                        WeatherStation.getInstance(context).addPlace(place);
-                    }
-                }
-            });
+            itemView.setOnClickListener(this);
         }
 
         public void bind(Place place) {
@@ -70,6 +70,13 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceHolder>
 
             placeName.setText(place.getName());
             placeCountry.setText(place.getCountry());
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(view, getAdapterPosition());
+            }
         }
     }
 }

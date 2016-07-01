@@ -1,5 +1,6 @@
 package net.borkiss.weatherforecast.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,26 +16,29 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import net.borkiss.weatherforecast.R;
 import net.borkiss.weatherforecast.adapter.PlaceAdapter;
 import net.borkiss.weatherforecast.api.ApiCallback;
 import net.borkiss.weatherforecast.api.ApiError;
 import net.borkiss.weatherforecast.api.WeatherApi;
+import net.borkiss.weatherforecast.api.WeatherStation;
 import net.borkiss.weatherforecast.dto.DTOFactory;
 import net.borkiss.weatherforecast.dto.PlaceDTO;
 import net.borkiss.weatherforecast.model.Place;
+import net.borkiss.weatherforecast.ui.PlacesActivity;
 
 import java.util.List;
 
-public class PlaceListFragment extends Fragment implements ApiCallback<List<PlaceDTO>> {
+public class PlaceListFragment extends Fragment implements MenuItem.OnMenuItemClickListener {
 
     private static final String TAG = PlaceListFragment.class.getSimpleName();
     private Handler handler = new Handler(Looper.getMainLooper());
 
     private RecyclerView recyclerView;
     private PlaceAdapter adapter;
+    private List<Place> places;
 
     public static PlaceListFragment newInstance() {
 
@@ -48,6 +52,7 @@ public class PlaceListFragment extends Fragment implements ApiCallback<List<Plac
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        places = WeatherStation.getInstance(getActivity()).getPlaces();
         setHasOptionsMenu(true);
     }
 
@@ -63,6 +68,16 @@ public class PlaceListFragment extends Fragment implements ApiCallback<List<Plac
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        adapter = new PlaceAdapter(getActivity(), places);
+        recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new PlaceAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(getActivity(), "Place is " + places.get(position).getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override
@@ -70,46 +85,25 @@ public class PlaceListFragment extends Fragment implements ApiCallback<List<Plac
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_place_list, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.menu_item_search);
-        final SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                Log.d(TAG, "QueryTextSubmit: " + s);
-                new WeatherApi().getPlacesByName(s, PlaceListFragment.this);
+        menu.findItem(R.id.menu_item_add).setOnMenuItemClickListener(this);
+        menu.findItem(R.id.menu_item_edit).setOnMenuItemClickListener(this);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+
+        switch (menuItem.getItemId()) {
+            case R.id.menu_item_add:
+
+                Intent intent = PlacesActivity.newIntent(getActivity(), PlacesActivity.TYPE.ADD);
+                startActivity(intent);
                 return true;
-            }
 
-            @Override
-            public boolean onQueryTextChange(String s) {
-                Log.d(TAG, "QueryTextChange: " + s);
-                return false;
-            }
-        });
+            case R.id.menu_item_edit:
 
-    }
-
-    @Override
-    public void onSuccess(final List<PlaceDTO> result) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-
-                if (result == null)
-                    return;
-
-                if (getActivity() == null)
-                    return;
-
-                List<Place> places = DTOFactory.INSTANCE.createPlaces(result);
-                adapter = new PlaceAdapter(getActivity(), places);
-                recyclerView.setAdapter(adapter);
-            }
-        });
-    }
-
-    @Override
-    public void onError(final ApiError error) {
-
+                Toast.makeText(getActivity(), "edit", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return false;
     }
 }

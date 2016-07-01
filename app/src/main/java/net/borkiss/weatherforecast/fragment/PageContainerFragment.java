@@ -1,5 +1,6 @@
 package net.borkiss.weatherforecast.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -75,7 +76,7 @@ public class PageContainerFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_places:
-                Intent intent = PlacesActivity.newIntent(getActivity());
+                Intent intent = PlacesActivity.newIntent(getActivity(), PlacesActivity.TYPE.EDIT);
                 startActivity(intent);
                 return true;
             default:
