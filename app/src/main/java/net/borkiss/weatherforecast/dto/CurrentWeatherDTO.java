@@ -1,9 +1,9 @@
-package net.borkiss.weatherforecast.model;
+package net.borkiss.weatherforecast.dto;
 
 import java.io.Serializable;
 
-public class ForecastFiveDayDTO implements Serializable {
-    private static final long serialVersionUID = 6178146749953918577L;
+public class CurrentWeatherDTO implements Serializable {
+    private static final long serialVersionUID = 4262761557170039078L;
 
     private int placeId;
     private long time;

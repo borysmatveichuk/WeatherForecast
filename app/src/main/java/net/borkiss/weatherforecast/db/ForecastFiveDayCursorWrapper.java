@@ -4,7 +4,7 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 
 import net.borkiss.weatherforecast.db.WeatherDbSchema.ForecastFiveDayTable;
-import net.borkiss.weatherforecast.model.ForecastFiveDayDTO;
+import net.borkiss.weatherforecast.dto.ForecastFiveDayDTO;
 
 public class ForecastFiveDayCursorWrapper extends CursorWrapper {
 
