@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import net.borkiss.weatherforecast.db.CurrentWeatherCursorWrapper;
 import net.borkiss.weatherforecast.db.ForecastFiveDayCursorWrapper;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WeatherStation {
+
+    private static final String TAG = WeatherStation.class.getSimpleName();
 
     private static WeatherStation weatherStation;
 
@@ -67,7 +70,7 @@ public class WeatherStation {
         ContentValues values = new ContentValues();
         values.put(CurrentWeatherTable.Cols.TIME, dto.getTime());
         values.put(CurrentWeatherTable.Cols.PLACE_ID, dto.getPlaceId());
-        values.put(CurrentWeatherTable.Cols.DOCUMENT, dto.getDocument());
+        //values.put(CurrentWeatherTable.Cols.DOCUMENT, dto.getDocument());
 
         return values;
     }
@@ -75,6 +78,17 @@ public class WeatherStation {
 
     public void addPlace(Place place) {
         database.insert(PlacesTable.NAME, null, getPlaceContentValues(place));
+    }
+
+    public int deletePlace(Place place) {
+        Log.d(TAG, "Where: " + new String[] {Integer.toString(place.getCityId())}.toString());
+        return database.delete(
+                PlacesTable.NAME,
+                //PlacesTable.Cols.CITY_ID + "="+place.getCityId(),
+                PlacesTable.Cols.CITY_ID + " = ? ",
+                //null
+                new String[] {Integer.toString(place.getCityId())}
+        );
     }
 
     public void addForecastFiveDayDTO(ForecastFiveDayDTO dto) {

@@ -8,4 +8,10 @@
         android:title="@string/add_city"
         app:showAsAction="always"/>
 
+    <item
+        android:id="@+id/menu_item_get_weather"
+        android:icon="@mipmap/ic_search_white_24dp"
+        android:title="@string/add"
+        app:showAsAction="always"/>
+
 </menu>

@@ -13,8 +13,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import net.borkiss.weatherforecast.R;
+import net.borkiss.weatherforecast.api.WeatherApi;
 import net.borkiss.weatherforecast.api.WeatherStation;
 import net.borkiss.weatherforecast.model.Place;
 import net.borkiss.weatherforecast.ui.PlacesActivity;
@@ -24,6 +26,8 @@ import java.util.List;
 public class PageContainerFragment extends Fragment {
 
     private List<Place> places;
+    private ViewPager viewPager;
+    private Place currentPlace;
 
     public static PageContainerFragment newInstance() {
 
@@ -50,12 +54,13 @@ public class PageContainerFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        places = WeatherStation.getInstance(getActivity()).getPlaces();
+        updateUI();
 
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         viewPager.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
+                currentPlace = places.get(position);
                 return WeatherFragment.newInstance(places.get(position));
             }
 
@@ -64,6 +69,19 @@ public class PageContainerFragment extends Fragment {
                 return places.size();
             }
         });
+    }
+
+    private void updateUI() {
+        places = WeatherStation.getInstance(getActivity()).getPlaces();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        updateUI();
+
+        viewPager.getAdapter().notifyDataSetChanged();
     }
 
     @Override

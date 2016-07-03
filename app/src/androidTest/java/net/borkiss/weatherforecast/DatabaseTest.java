@@ -76,6 +76,9 @@ public class DatabaseTest {
         Place placeFromDB = sqLiteDatabase.getPlaceByCityId(123456);
         assertThat(placeFromDB.getCityId(), is(123456));
 
+        int delCount = sqLiteDatabase.deletePlace(placeFromDB);
+        assertThat(delCount, is(1));
+
     }
 
 

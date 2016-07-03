@@ -1,5 +1,6 @@
 package net.borkiss.weatherforecast.dto;
 
+import net.borkiss.weatherforecast.model.CurrentWeather;
 import net.borkiss.weatherforecast.model.Place;
 
 import java.util.ArrayList;
@@ -32,5 +33,25 @@ public enum DTOFactory {
         }
 
         return list;
+    }
+
+    public CurrentWeather createCurrentWeather(CurrentWeatherDTO dto) {
+        if (dto == null)
+            return null;
+
+        CurrentWeather currentWeather = new CurrentWeather();
+        currentWeather.setTime(dto.getTime());
+        currentWeather.setPlaceId(dto.getPlaceId());
+        currentWeather.setWeatherMain(dto.getWeatherMain());
+        currentWeather.setWeatherDescription(dto.getWeatherDescription());
+        currentWeather.setTemperature(dto.getTemperature());
+        currentWeather.setPressure(dto.getPressure());
+        currentWeather.setHumidity(dto.getHumidity());
+        currentWeather.setMinTemperature(dto.getMinTemperature());
+        currentWeather.setMaxTemperature(dto.getMaxTemperature());
+        currentWeather.setWindSpeed(dto.getWindSpeed());
+        currentWeather.setWindDegree(dto.getWindDegree());
+
+        return currentWeather;
     }
 }

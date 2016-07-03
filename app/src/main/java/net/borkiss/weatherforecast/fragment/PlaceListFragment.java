@@ -52,7 +52,6 @@ public class PlaceListFragment extends Fragment implements MenuItem.OnMenuItemCl
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        places = WeatherStation.getInstance(getActivity()).getPlaces();
         setHasOptionsMenu(true);
     }
 
@@ -69,15 +68,39 @@ public class PlaceListFragment extends Fragment implements MenuItem.OnMenuItemCl
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter = new PlaceAdapter(getActivity(), places);
-        recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new PlaceAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Toast.makeText(getActivity(), "Place is " + places.get(position).getName(), Toast.LENGTH_SHORT).show();
-            }
-        });
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
+
+    private void updateUI() {
+        places = WeatherStation.getInstance(getActivity()).getPlaces();
+        if (adapter == null) {
+            adapter = new PlaceAdapter(getActivity(), places);
+            recyclerView.setAdapter(adapter);
+            adapter.setOnItemClickListener(new PlaceAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    switch (view.getId()) {
+                        case R.id.btnDelete:
+                            WeatherStation.getInstance(getActivity()).deletePlace(places.get(position));
+                            break;
+                        default:
+                            Toast.makeText(getActivity(), "Place is " + places.get(position).getName(), Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+
+        } else {
+            adapter.setPlaces(places);
+            adapter.notifyDataSetChanged();
+            Toast.makeText(getActivity(), "Updated!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

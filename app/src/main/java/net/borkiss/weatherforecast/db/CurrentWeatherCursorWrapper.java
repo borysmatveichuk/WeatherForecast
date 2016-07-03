@@ -26,7 +26,7 @@ public class CurrentWeatherCursorWrapper extends CursorWrapper {
         CurrentWeatherDTO dto = new CurrentWeatherDTO();
         dto.setPlaceId(placeId);
         dto.setTime(time);
-        dto.setDocument(document);
+        //dto.setDocument(document);
 
         return dto;
     }

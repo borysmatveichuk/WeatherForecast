@@ -2,6 +2,8 @@ package net.borkiss.weatherforecast.dto;
 
 import com.google.gson.reflect.TypeToken;
 
+import net.borkiss.weatherforecast.model.CurrentWeather;
+
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -9,6 +11,7 @@ public class JSONAdapterFactory {
 
     private static JSONPlaceAdapter placeAdapter;
     private static JSONSearchResultWrapperAdapter searchResultWrapperAdapter;
+    private static JSONCurrentWeatherAdapter currentWeatherAdapter;
 
     public static class JSONPlaceAdapter extends JSONEntityAdapter<PlaceDTO> {
 
@@ -44,6 +47,23 @@ public class JSONAdapterFactory {
         }
     }
 
+    public static class JSONCurrentWeatherAdapter extends JSONEntityAdapter<CurrentWeatherDTO> {
+
+        private JSONCurrentWeatherAdapter() {
+        }
+
+        @Override
+        protected Class<CurrentWeatherDTO> getType() {
+            return CurrentWeatherDTO.class;
+        }
+
+        @Override
+        protected Type getCollectionType() {
+            return new TypeToken<List<CurrentWeatherDTO>>() {
+            }.getType();
+        }
+    }
+
     public synchronized static JSONPlaceAdapter getJsonPlaceAdapter() {
         if (placeAdapter == null)
             placeAdapter = new JSONPlaceAdapter();
@@ -54,6 +74,12 @@ public class JSONAdapterFactory {
         if (searchResultWrapperAdapter == null)
             searchResultWrapperAdapter = new JSONSearchResultWrapperAdapter();
         return searchResultWrapperAdapter;
+    }
+
+    public synchronized static JSONCurrentWeatherAdapter getJsonCurrentWeatherAdapter() {
+        if (currentWeatherAdapter == null)
+            currentWeatherAdapter = new JSONCurrentWeatherAdapter();
+        return currentWeatherAdapter;
     }
 
 }

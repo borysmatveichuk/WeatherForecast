@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,18 +51,25 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceHolder>
         return places.size();
     }
 
+    public void setPlaces(List<Place> places) {
+        this.places = places;
+    }
+
     public class PlaceHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private Place place;
 
         private TextView placeName;
         private TextView placeCountry;
+        private Button delete;
 
         public PlaceHolder(View itemView) {
             super(itemView);
 
             placeName = (TextView) itemView.findViewById(R.id.txtPlaceName);
             placeCountry = (TextView) itemView.findViewById(R.id.txtPlaceCountry);
+            delete = (Button) itemView.findViewById(R.id.btnDelete);
+            delete.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }
 
