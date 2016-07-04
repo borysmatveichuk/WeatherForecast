@@ -13,10 +13,12 @@ import net.borkiss.weatherforecast.R;
 import net.borkiss.weatherforecast.api.ApiCallback;
 import net.borkiss.weatherforecast.api.ApiError;
 import net.borkiss.weatherforecast.api.WeatherApi;
+import net.borkiss.weatherforecast.api.WeatherStation;
 import net.borkiss.weatherforecast.dto.CurrentWeatherDTO;
+import net.borkiss.weatherforecast.model.CurrentWeather;
 import net.borkiss.weatherforecast.model.Place;
 
-public class WeatherFragment extends Fragment implements ApiCallback<CurrentWeatherDTO> {
+public class WeatherFragment extends Fragment {
 
     private static final String ARG_PLACE_ID = "placeId";
 
@@ -53,19 +55,10 @@ public class WeatherFragment extends Fragment implements ApiCallback<CurrentWeat
         placeName = (TextView) view.findViewById(R.id.txtPlace);
         placeName.setText(place.getName());
 
-        new WeatherApi().getCurrentWeather(place.getCityId(), this);
-        Toast.makeText(getActivity(), "Get weather " + place.getCityId(), Toast.LENGTH_SHORT).show();
+        CurrentWeather weather = WeatherStation.getInstance(getActivity()).getCurrentWeatherByCityId(place.getCityId());
+        TextView txtWeather = (TextView) view.findViewById(R.id.txtWeather);
+        txtWeather.setText(weather.toString());
 
     }
 
-
-    @Override
-    public void onSuccess(CurrentWeatherDTO result) {
-        placeName.setText(result.getWeatherMain() );
-    }
-
-    @Override
-    public void onError(ApiError error) {
-
-    }
 }

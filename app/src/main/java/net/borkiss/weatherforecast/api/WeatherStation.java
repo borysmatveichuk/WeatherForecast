@@ -13,12 +13,13 @@ import net.borkiss.weatherforecast.db.WeatherBaseHelper;
 import net.borkiss.weatherforecast.db.WeatherDbSchema.CurrentWeatherTable;
 import net.borkiss.weatherforecast.db.WeatherDbSchema.ForecastFiveDayTable;
 import net.borkiss.weatherforecast.db.WeatherDbSchema.PlacesTable;
-import net.borkiss.weatherforecast.dto.CurrentWeatherDTO;
 import net.borkiss.weatherforecast.dto.ForecastFiveDayDTO;
+import net.borkiss.weatherforecast.model.CurrentWeather;
 import net.borkiss.weatherforecast.model.Place;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
 public class WeatherStation {
 
@@ -46,7 +47,7 @@ public class WeatherStation {
         return weatherStation;
     }
 
-    private static ContentValues getPlaceContentValues(Place place) {
+    private static ContentValues getContentValues(Place place) {
         ContentValues values = new ContentValues();
         values.put(PlacesTable.Cols.NAME, place.getName());
         values.put(PlacesTable.Cols.CITY_ID, place.getCityId());
@@ -57,7 +58,7 @@ public class WeatherStation {
         return values;
     }
 
-    private static ContentValues getForecastFiveDayDTOContentValues(ForecastFiveDayDTO dto) {
+    private static ContentValues getContentValues(ForecastFiveDayDTO dto) {
         ContentValues values = new ContentValues();
         values.put(ForecastFiveDayTable.Cols.TIME, dto.getTime());
         values.put(ForecastFiveDayTable.Cols.PLACE_ID, dto.getPlaceId());
@@ -66,18 +67,27 @@ public class WeatherStation {
         return values;
     }
 
-    private ContentValues getCurrentWeatherDTOContentValues(CurrentWeatherDTO dto) {
+    private ContentValues getContentValues(CurrentWeather weather) {
         ContentValues values = new ContentValues();
-        values.put(CurrentWeatherTable.Cols.TIME, dto.getTime());
-        values.put(CurrentWeatherTable.Cols.PLACE_ID, dto.getPlaceId());
-        //values.put(CurrentWeatherTable.Cols.DOCUMENT, dto.getDocument());
+        values.put(CurrentWeatherTable.Cols.TIME, weather.getTime());
+        values.put(CurrentWeatherTable.Cols.PLACE_ID, weather.getPlaceId());
+        values.put(CurrentWeatherTable.Cols.WEATHER_MAIN, weather.getWeatherMain());
+        values.put(CurrentWeatherTable.Cols.WEATHER_DESCRIPTION, weather.getWeatherDescription());
+        values.put(CurrentWeatherTable.Cols.TEMPERATURE, weather.getTemperature());
+        values.put(CurrentWeatherTable.Cols.PRESSURE, weather.getPressure());
+        values.put(CurrentWeatherTable.Cols.HUMIDITY, weather.getHumidity());
+        values.put(CurrentWeatherTable.Cols.MIN_TEMPERATURE, weather.getMinTemperature());
+        values.put(CurrentWeatherTable.Cols.MAX_TEMPERATURE, weather.getMaxTemperature());
+        values.put(CurrentWeatherTable.Cols.WIND_SPEED, weather.getWindSpeed());
+        values.put(CurrentWeatherTable.Cols.WIND_DEGREE, weather.getWindDegree());
+        values.put(CurrentWeatherTable.Cols.CLOUDS, weather.getClouds());
 
         return values;
     }
 
 
     public void addPlace(Place place) {
-        database.insert(PlacesTable.NAME, null, getPlaceContentValues(place));
+        database.insert(PlacesTable.NAME, null, getContentValues(place));
     }
 
     public int deletePlace(Place place) {
@@ -92,11 +102,36 @@ public class WeatherStation {
     }
 
     public void addForecastFiveDayDTO(ForecastFiveDayDTO dto) {
-        database.insert(ForecastFiveDayTable.NAME, null, getForecastFiveDayDTOContentValues(dto));
+        database.insert(ForecastFiveDayTable.NAME, null, getContentValues(dto));
     }
 
-    public void addCurrentWeatherDTO(CurrentWeatherDTO dto) {
-        database.insert(CurrentWeatherTable.NAME, null, getCurrentWeatherDTOContentValues(dto));
+    public int addCurrentWeather(CurrentWeather weather) {
+
+        int count = 0;
+        CurrentWeatherCursorWrapper cursor = null;
+        String whereClause = CurrentWeatherTable.Cols.PLACE_ID + " = ? ";
+        String[] whereArgs = {Integer.toString(weather.getPlaceId())};
+
+        try {
+            cursor = queryCurrentWeather(whereClause, whereArgs);
+
+            if (cursor.moveToFirst()) {
+                count = database.update(CurrentWeatherTable.NAME,
+                        getContentValues(weather),
+                        whereClause,
+                        whereArgs);
+            } else {
+                count = (int) database.insert(CurrentWeatherTable.NAME, null, getContentValues(weather));
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+
+        return count;
     }
 
     public List<Place> getPlaces() {
@@ -136,22 +171,42 @@ public class WeatherStation {
 
     }
 
-    public List<CurrentWeatherDTO> getListCurrentWeatherDTO() {
+    public List<CurrentWeather> getListCurrentWeather() {
 
-        List<CurrentWeatherDTO> dto = new ArrayList<>();
+        List<CurrentWeather> weathers = new ArrayList<>();
         CurrentWeatherCursorWrapper cursor = queryCurrentWeather(null, null);
 
         try {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                dto.add(cursor.getCurrentWeatherDTO());
+                weathers.add(cursor.getCurrentWeather());
                 cursor.moveToNext();
             }
         } finally {
             cursor.close();
         }
 
-        return dto;
+        return weathers;
+    }
+
+    public CurrentWeather getCurrentWeatherByCityId(int cityId) {
+
+        CurrentWeather weather = new CurrentWeather();
+
+        String whereClause = CurrentWeatherTable.Cols.PLACE_ID + " = ? ";
+        String[] whereArgs = {Integer.toString(cityId)};
+
+        CurrentWeatherCursorWrapper cursor = queryCurrentWeather(whereClause, whereArgs);
+
+        try {
+            if (cursor.moveToFirst()) {
+                weather = cursor.getCurrentWeather();
+            };
+        } finally {
+            cursor.close();
+        }
+
+        return weather;
     }
 
     public List<ForecastFiveDayDTO> getListForecastFiveDayDTO() {
@@ -214,4 +269,32 @@ public class WeatherStation {
         return new ForecastFiveDayCursorWrapper(cursor);
     }
 
+
+//    protected long stdInsertOrUpdate(D object, K id) {
+//        SQLiteDatabase _db = db.open();
+//        long longId = 0;
+//
+//        if (id == null)
+//            longId = _db.insert(table, null, createContentValues(object));
+//        else {
+//            Cursor c = null;
+//            try {
+//                c = _db.query(table, new String[] { CommonDB.STD_ID }, CommonDB.STD_ID + "=?",
+//                        new String[] { id.toString() }, null, null, null);
+//                if (c.moveToFirst()) {
+//                    _db.update(table, createContentValues(object), CommonDB.STD_ID + "=?",
+//                            new String[] { id.toString() });
+//                    longId = convertKeytoLong(id);
+//                } else {
+//                    longId = _db.insert(table, null, createContentValues(object));
+//                }
+//            } catch (Exception e) {
+//                Log.e(table, e.toString());
+//            } finally {
+//                if (c != null)
+//                    c.close();
+//            }
+//        }
+//        return longId;
+//    }
 }

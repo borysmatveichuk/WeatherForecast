@@ -51,6 +51,7 @@ public enum DTOFactory {
         currentWeather.setMaxTemperature(dto.getMaxTemperature());
         currentWeather.setWindSpeed(dto.getWindSpeed());
         currentWeather.setWindDegree(dto.getWindDegree());
+        currentWeather.setClouds(dto.getClouds());
 
         return currentWeather;
     }

@@ -19,6 +19,7 @@ import net.borkiss.weatherforecast.R;
 import net.borkiss.weatherforecast.api.WeatherApi;
 import net.borkiss.weatherforecast.api.WeatherStation;
 import net.borkiss.weatherforecast.model.Place;
+import net.borkiss.weatherforecast.service.WeatherService;
 import net.borkiss.weatherforecast.ui.PlacesActivity;
 
 import java.util.List;
@@ -42,6 +43,9 @@ public class PageContainerFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        Intent intent = WeatherService.newIntent(getActivity());
+        getActivity().startService(intent);
     }
 
     @Nullable

@@ -17,6 +17,7 @@ public class CurrentWeather implements Serializable {
     private float maxTemperature;
     private float windSpeed;
     private float windDegree;
+    private int clouds;
 
     public long getTime() {
         return time;
@@ -106,4 +107,29 @@ public class CurrentWeather implements Serializable {
         this.windDegree = windDegree;
     }
 
+    public int getClouds() {
+        return clouds;
+    }
+
+    public void setClouds(int clouds) {
+        this.clouds = clouds;
+    }
+
+    @Override
+    public String toString() {
+        return "CurrentWeather{" +
+                "time=" + time +
+                ", placeId=" + placeId +
+                ", weatherMain='" + weatherMain + '\'' +
+                ", weatherDescription='" + weatherDescription + '\'' +
+                ", temperature=" + temperature +
+                ", pressure=" + pressure +
+                ", humidity=" + humidity +
+                ", minTemperature=" + minTemperature +
+                ", maxTemperature=" + maxTemperature +
+                ", windSpeed=" + windSpeed +
+                ", windDegree=" + windDegree +
+                ", clouds=" + clouds +
+                '}';
+    }
 }

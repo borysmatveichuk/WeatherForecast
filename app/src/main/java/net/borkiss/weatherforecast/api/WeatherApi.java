@@ -19,7 +19,7 @@ public class WeatherApi extends WeatherRestAbs {
         Runnable task = new Runnable() {
             @Override
             public void run() {
-                final HTTPResult result = doGetTest(URIBuildHelper.createUriCurrentWeather(cityId));
+                final HTTPResult result = doGet(URIBuildHelper.createUriCurrentWeather(cityId));
 
                 switch (result.getHttpCode()) {
                     case HTTP_OK:

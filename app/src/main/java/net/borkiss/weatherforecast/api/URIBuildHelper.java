@@ -33,8 +33,11 @@ public class URIBuildHelper {
     private static final String KEY_LONGITUDE = "lon";
     private static final String KEY_CITY_ID = "q";
     private static final String KEY_API_ID = "appid";
+    private static final String KEY_UNITS = "units";
 
     private static final String VALUE_SEARCH_PARAM_LIKE = "like";
+    private static final String VALUE_UNITS_METRIC = "metric";
+    private static final String VALUE_UNITS_IMPERIAL = "imperial";
 
     public static String createUriFindCityByName(String cityName) {
         return createCommonUri()
@@ -50,6 +53,7 @@ public class URIBuildHelper {
                 .appendEncodedPath(KEY_CURRENT_WEATHER)
                 .appendQueryParameter(KEY_CITY_NAME, cityName)
                 .appendQueryParameter(KEY_API_ID, API_KEY)
+                .appendQueryParameter(KEY_UNITS, VALUE_UNITS_METRIC)
                 .toString();
     }
 
@@ -58,6 +62,7 @@ public class URIBuildHelper {
                 .appendEncodedPath(KEY_CURRENT_WEATHER)
                 .appendQueryParameter(KEY_CITY_ID, Integer.toString(cityId))
                 .appendQueryParameter(KEY_API_ID, API_KEY)
+                .appendQueryParameter(KEY_UNITS, VALUE_UNITS_METRIC)
                 .toString();
     }
 
@@ -67,6 +72,7 @@ public class URIBuildHelper {
                 .appendQueryParameter(KEY_LATITUDE, Integer.toString(latitude))
                 .appendQueryParameter(KEY_LONGITUDE, Integer.toString(longitude))
                 .appendQueryParameter(KEY_API_ID, API_KEY)
+                .appendQueryParameter(KEY_UNITS, VALUE_UNITS_METRIC)
                 .toString();
     }
 
@@ -75,6 +81,7 @@ public class URIBuildHelper {
                 .appendEncodedPath(KEY_FIVE_DAY_WEATHER)
                 .appendQueryParameter(KEY_CITY_ID, Integer.toString(cityId))
                 .appendQueryParameter(KEY_API_ID, API_KEY)
+                .appendQueryParameter(KEY_UNITS, VALUE_UNITS_METRIC)
                 .toString();
     }
 

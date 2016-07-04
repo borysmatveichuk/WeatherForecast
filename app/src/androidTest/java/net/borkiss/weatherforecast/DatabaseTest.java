@@ -7,6 +7,7 @@ import net.borkiss.weatherforecast.api.WeatherStation;
 import net.borkiss.weatherforecast.db.WeatherBaseHelper;
 import net.borkiss.weatherforecast.dto.CurrentWeatherDTO;
 import net.borkiss.weatherforecast.dto.ForecastFiveDayDTO;
+import net.borkiss.weatherforecast.model.CurrentWeather;
 import net.borkiss.weatherforecast.model.Place;
 
 import org.junit.After;
@@ -48,7 +49,7 @@ public class DatabaseTest {
     @Test
     public void databaseInsertSelect() throws Exception {
         insertSelectPlaces();
-        insertSelectCurrentWeatherDTO();
+        insertSelectCurrentWeather();
         insertSelectForecastFiveDayDTO();
     }
 
@@ -82,29 +83,35 @@ public class DatabaseTest {
     }
 
 
-    private void insertSelectCurrentWeatherDTO() throws Exception {
-        CurrentWeatherDTO dto = new CurrentWeatherDTO();
-        dto.setDocument("dto");
+    private void insertSelectCurrentWeather() throws Exception {
+        CurrentWeather dto = new CurrentWeather();
         dto.setTime(123456789);
         dto.setPlaceId(111);
 
-        CurrentWeatherDTO dto2 = new CurrentWeatherDTO();
-        dto2.setDocument("dto2");
+        CurrentWeather dto2 = new CurrentWeather();
         dto2.setTime(99999999L);
         dto2.setPlaceId(222);
 
 
-        sqLiteDatabase.addCurrentWeatherDTO(dto);
-        sqLiteDatabase.addCurrentWeatherDTO(dto2);
+        sqLiteDatabase.addCurrentWeather(dto);
+        sqLiteDatabase.addCurrentWeather(dto2);
 
-        List<CurrentWeatherDTO> list = sqLiteDatabase.getListCurrentWeatherDTO();
+        List<CurrentWeather> listAdded = sqLiteDatabase.getListCurrentWeather();
 
-        assertThat(list.size(), is(2));
+        assertThat(listAdded.size(), is(2));
 
-        assertTrue(list.get(1).getDocument().equals("dto2"));
-        assertThat(list.get(1).getTime(), is(99999999L));
-        assertThat(list.get(1).getPlaceId(), is(222));
+        assertThat(listAdded.get(1).getTime(), is(99999999L));
+        assertThat(listAdded.get(1).getPlaceId(), is(222));
 
+        CurrentWeather dto3 = new CurrentWeather();
+        dto3.setTime(987654321L);
+        dto3.setPlaceId(111);
+        //must bu updated
+        assertThat(sqLiteDatabase.addCurrentWeather(dto3), is(1));
+        assertThat(listAdded.size(), is(2));
+
+        List<CurrentWeather> listUpdated = sqLiteDatabase.getListCurrentWeather();
+        assertThat(listUpdated.get(0).getTime(), is(987654321L));
     }
 
     private void insertSelectForecastFiveDayDTO() throws Exception {

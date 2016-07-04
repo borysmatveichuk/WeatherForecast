@@ -4,7 +4,7 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 
 import net.borkiss.weatherforecast.db.WeatherDbSchema.CurrentWeatherTable;
-import net.borkiss.weatherforecast.dto.CurrentWeatherDTO;
+import net.borkiss.weatherforecast.model.CurrentWeather;
 
 public class CurrentWeatherCursorWrapper extends CursorWrapper {
 
@@ -17,17 +17,35 @@ public class CurrentWeatherCursorWrapper extends CursorWrapper {
         super(cursor);
     }
 
-    public CurrentWeatherDTO getCurrentWeatherDTO() {
+    public CurrentWeather getCurrentWeather() {
 
         int placeId = getInt(getColumnIndex(CurrentWeatherTable.Cols.PLACE_ID));
         long time = getLong(getColumnIndex(CurrentWeatherTable.Cols.TIME));
-        String document = getString(getColumnIndex(CurrentWeatherTable.Cols.DOCUMENT));
+        String weatherMine = getString(getColumnIndex(CurrentWeatherTable.Cols.WEATHER_MAIN));
+        String weatherDescription = getString(getColumnIndex(CurrentWeatherTable.Cols.WEATHER_DESCRIPTION));
+        float temperature = getFloat(getColumnIndex(CurrentWeatherTable.Cols.TEMPERATURE));
+        float pressure = getFloat(getColumnIndex(CurrentWeatherTable.Cols.PRESSURE));
+        int humidity = getInt(getColumnIndex(CurrentWeatherTable.Cols.HUMIDITY));
+        float minTemperature = getFloat(getColumnIndex(CurrentWeatherTable.Cols.MIN_TEMPERATURE));
+        float maxTemperature = getFloat(getColumnIndex(CurrentWeatherTable.Cols.MAX_TEMPERATURE));
+        float windSpeed = getFloat(getColumnIndex(CurrentWeatherTable.Cols.WIND_SPEED));
+        float windDegree = getFloat(getColumnIndex(CurrentWeatherTable.Cols.WIND_DEGREE));
+        int clouds = getInt(getColumnIndex(CurrentWeatherTable.Cols.CLOUDS));
 
-        CurrentWeatherDTO dto = new CurrentWeatherDTO();
-        dto.setPlaceId(placeId);
-        dto.setTime(time);
-        //dto.setDocument(document);
+        CurrentWeather weather = new CurrentWeather();
+        weather.setPlaceId(placeId);
+        weather.setTime(time);
+        weather.setWeatherMain(weatherMine);
+        weather.setWeatherDescription(weatherDescription);
+        weather.setTemperature(temperature);
+        weather.setPressure(pressure);
+        weather.setHumidity(humidity);
+        weather.setMinTemperature(minTemperature);
+        weather.setMaxTemperature(maxTemperature);
+        weather.setWindSpeed(windSpeed);
+        weather.setWindDegree(windDegree);
+        weather.setClouds(clouds);
 
-        return dto;
+        return weather;
     }
 }

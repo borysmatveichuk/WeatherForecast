@@ -22,6 +22,9 @@ public class CurrentWeatherDTO implements Serializable {
     @SerializedName("wind")
     private Wind wind;
 
+    @SerializedName("clouds")
+    private Clouds clouds;
+
     public long getTime() {
         return time;
     }
@@ -83,6 +86,9 @@ public class CurrentWeatherDTO implements Serializable {
         return wind.deg;
     }
 
+    public int getClouds() {
+        return clouds.all;
+    }
 
     private class Weather {
         String main;
@@ -100,6 +106,10 @@ public class CurrentWeatherDTO implements Serializable {
     private class Wind {
         float speed;
         float deg;
+    }
+
+    private class Clouds {
+        int all;
     }
 }
 
