@@ -1,9 +1,12 @@
 package net.borkiss.weatherforecast.service;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -26,6 +29,8 @@ public class WeatherService extends IntentService {
 
     private static final String TAG = WeatherService.class.getSimpleName();
 
+    private static final int INTERVAL = 1000 * 60 * 10; // 15 MINUTES
+
     private ApiCallback<CurrentWeatherDTO> currentWeatherCallback = new ApiCallback<CurrentWeatherDTO>() {
         @Override
         public void onSuccess(CurrentWeatherDTO result) {
@@ -33,7 +38,10 @@ public class WeatherService extends IntentService {
                 return;
 
             final CurrentWeather currentWeather = DTOFactory.INSTANCE.createCurrentWeather(result);
-            WeatherStation.getInstance(WeatherService.this).addCurrentWeather(currentWeather);
+            int count = WeatherStation.getInstance(WeatherService.this).addCurrentWeather(currentWeather);
+            if (count > 0) {
+                Log.d(TAG, "Added " + count + " record(s) to DB.");
+            }
         }
 
         @Override
@@ -58,16 +66,16 @@ public class WeatherService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+
+        if(!isNetworkAvailableAndConnected())
+            return;
+
         Log.i(TAG, "Received an intent: " + intent);
 
         WeatherApi api = new WeatherApi();
 
         List<Place> places = WeatherStation.getInstance(this).getPlaces();
         for (Place place : places) {
-            Log.i(TAG, place.getCityId() + " " + place.getName() + " " + place.getCountry());
-            String url = URIBuildHelper.createUriCurrentWeather(place.getCityId());
-            Log.i(TAG, url);
-
             api.getCurrentWeather(place.getCityId(), currentWeatherCallback);
         }
 
@@ -81,6 +89,27 @@ public class WeatherService extends IntentService {
 
         return isNetworkAvailable &&
                 cm.getActiveNetworkInfo().isConnected();
+    }
+
+    public static boolean isServiceAlarmOn(Context context) {
+        Intent intent = WeatherService.newIntent(context);
+        PendingIntent pi = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_NO_CREATE);
+
+        return pi != null;
+    }
+
+    public static void setServiceAlarm(Context context, boolean isOn) {
+        Intent intent = WeatherService.newIntent(context);
+        PendingIntent pi = PendingIntent.getService(context, 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager)
+                context.getSystemService(Context.ALARM_SERVICE);
+        if (isOn) {
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
+                    SystemClock.elapsedRealtime(), INTERVAL, pi);
+        } else {
+            alarmManager.cancel(pi);
+            pi.cancel();
+        }
     }
 
 }

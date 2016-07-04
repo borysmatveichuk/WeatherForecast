@@ -1,12 +1,13 @@
 package net.borkiss.weatherforecast.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class CurrentWeather implements Serializable {
 
     private static final long serialVersionUID = -7470921378853640783L;
 
-    private long time;
+    private Date time;
     private int placeId;
     private String weatherMain;
     private String weatherDescription;
@@ -19,11 +20,11 @@ public class CurrentWeather implements Serializable {
     private float windDegree;
     private int clouds;
 
-    public long getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(long time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 

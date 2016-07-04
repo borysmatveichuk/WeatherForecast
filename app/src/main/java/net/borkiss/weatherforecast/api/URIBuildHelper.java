@@ -31,7 +31,7 @@ public class URIBuildHelper {
     private static final String KEY_CITY_NAME = "q";
     private static final String KEY_LATITUDE = "lat";
     private static final String KEY_LONGITUDE = "lon";
-    private static final String KEY_CITY_ID = "q";
+    private static final String KEY_CITY_ID = "id";
     private static final String KEY_API_ID = "appid";
     private static final String KEY_UNITS = "units";
 

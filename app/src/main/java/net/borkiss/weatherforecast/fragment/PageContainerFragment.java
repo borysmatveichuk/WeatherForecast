@@ -46,6 +46,10 @@ public class PageContainerFragment extends Fragment {
 
         Intent intent = WeatherService.newIntent(getActivity());
         getActivity().startService(intent);
+
+        if (!WeatherService.isServiceAlarmOn(getActivity())) {
+            WeatherService.setServiceAlarm(getActivity(), true);
+        }
     }
 
     @Nullable

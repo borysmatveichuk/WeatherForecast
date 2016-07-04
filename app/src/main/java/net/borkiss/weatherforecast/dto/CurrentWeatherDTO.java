@@ -3,12 +3,14 @@ package net.borkiss.weatherforecast.dto;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public class CurrentWeatherDTO implements Serializable {
     private static final long serialVersionUID = 4262761557170039078L;
 
-    private long time;
+    @SerializedName("dt")
+    private Date time;
 
     @SerializedName("id")
     private int placeId;
@@ -25,20 +27,12 @@ public class CurrentWeatherDTO implements Serializable {
     @SerializedName("clouds")
     private Clouds clouds;
 
-    public long getTime() {
+    public Date getTime() {
         return time;
-    }
-
-    public void setTime(long time) {
-        this.time = time;
     }
 
     public int getPlaceId() {
         return placeId;
-    }
-
-    public void setPlaceId(int placeId) {
-        this.placeId = placeId;
     }
 
     public String getWeatherMain() {

@@ -33,7 +33,7 @@ public class WeatherBaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("create table " + CurrentWeatherTable.NAME + "(" +
                 " _id integer primary key autoincrement, " +
                 CurrentWeatherTable.Cols.PLACE_ID + " INTEGER , " +
-                CurrentWeatherTable.Cols.TIME + ", " +
+                CurrentWeatherTable.Cols.TIME + " INTEGER , " +
                 CurrentWeatherTable.Cols.WEATHER_MAIN + ", " +
                 CurrentWeatherTable.Cols.WEATHER_DESCRIPTION + ", " +
                 CurrentWeatherTable.Cols.TEMPERATURE + " REAL , " +

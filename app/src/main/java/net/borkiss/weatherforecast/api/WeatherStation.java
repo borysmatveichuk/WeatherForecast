@@ -28,16 +28,12 @@ public class WeatherStation {
     private static WeatherStation weatherStation;
 
     private Context appContext;
-    private List<String> currentWeather;
-    private List<String> forecastFiveDays;
 
     private SQLiteDatabase database;
 
     private WeatherStation(Context context) {
         appContext = context.getApplicationContext();
         database = new WeatherBaseHelper(appContext).getWritableDatabase();
-        currentWeather = new ArrayList<>();
-        forecastFiveDays = new ArrayList<>();
     }
 
     public static WeatherStation getInstance(Context context) {
@@ -69,7 +65,7 @@ public class WeatherStation {
 
     private ContentValues getContentValues(CurrentWeather weather) {
         ContentValues values = new ContentValues();
-        values.put(CurrentWeatherTable.Cols.TIME, weather.getTime());
+        values.put(CurrentWeatherTable.Cols.TIME, weather.getTime().getTime());
         values.put(CurrentWeatherTable.Cols.PLACE_ID, weather.getPlaceId());
         values.put(CurrentWeatherTable.Cols.WEATHER_MAIN, weather.getWeatherMain());
         values.put(CurrentWeatherTable.Cols.WEATHER_DESCRIPTION, weather.getWeatherDescription());
@@ -91,12 +87,9 @@ public class WeatherStation {
     }
 
     public int deletePlace(Place place) {
-        Log.d(TAG, "Where: " + new String[] {Integer.toString(place.getCityId())}.toString());
         return database.delete(
                 PlacesTable.NAME,
-                //PlacesTable.Cols.CITY_ID + "="+place.getCityId(),
                 PlacesTable.Cols.CITY_ID + " = ? ",
-                //null
                 new String[] {Integer.toString(place.getCityId())}
         );
     }
@@ -269,32 +262,4 @@ public class WeatherStation {
         return new ForecastFiveDayCursorWrapper(cursor);
     }
 
-
-//    protected long stdInsertOrUpdate(D object, K id) {
-//        SQLiteDatabase _db = db.open();
-//        long longId = 0;
-//
-//        if (id == null)
-//            longId = _db.insert(table, null, createContentValues(object));
-//        else {
-//            Cursor c = null;
-//            try {
-//                c = _db.query(table, new String[] { CommonDB.STD_ID }, CommonDB.STD_ID + "=?",
-//                        new String[] { id.toString() }, null, null, null);
-//                if (c.moveToFirst()) {
-//                    _db.update(table, createContentValues(object), CommonDB.STD_ID + "=?",
-//                            new String[] { id.toString() });
-//                    longId = convertKeytoLong(id);
-//                } else {
-//                    longId = _db.insert(table, null, createContentValues(object));
-//                }
-//            } catch (Exception e) {
-//                Log.e(table, e.toString());
-//            } finally {
-//                if (c != null)
-//                    c.close();
-//            }
-//        }
-//        return longId;
-//    }
 }

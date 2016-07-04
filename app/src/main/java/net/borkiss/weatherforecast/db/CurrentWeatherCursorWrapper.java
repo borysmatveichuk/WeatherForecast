@@ -6,6 +6,8 @@ import android.database.CursorWrapper;
 import net.borkiss.weatherforecast.db.WeatherDbSchema.CurrentWeatherTable;
 import net.borkiss.weatherforecast.model.CurrentWeather;
 
+import java.util.Date;
+
 public class CurrentWeatherCursorWrapper extends CursorWrapper {
 
     /**
@@ -34,7 +36,7 @@ public class CurrentWeatherCursorWrapper extends CursorWrapper {
 
         CurrentWeather weather = new CurrentWeather();
         weather.setPlaceId(placeId);
-        weather.setTime(time);
+        weather.setTime(new Date(time));
         weather.setWeatherMain(weatherMine);
         weather.setWeatherDescription(weatherDescription);
         weather.setTemperature(temperature);
