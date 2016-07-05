@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
+import android.provider.BaseColumns;
 import android.util.Log;
 
 import net.borkiss.weatherforecast.db.CurrentWeatherCursorWrapper;
@@ -216,6 +218,17 @@ public class WeatherStation {
         }
 
         return dto;
+    }
+
+    //EXAMPLE
+    public void deleteFiveDayForecast(final int cityId)
+    {
+        final String ROUTE_TABLE_DELETE =
+                "DELETE FROM route WHERE " + BaseColumns._ID + " = ?";
+
+        final SQLiteStatement delete = database.compileStatement(ROUTE_TABLE_DELETE);
+        delete.bindLong(1, cityId);
+        delete.execute();
     }
 
     private PlaceCursorWrapper queryPlaces(String whereClause, String[] whereArgs) {
