@@ -24,7 +24,7 @@ public enum DTOFactory {
         return place;
     }
 
-    public List<Place> createPlaces(List<PlaceDTO> dtoList) {
+    public List<Place> createPlaceList(List<PlaceDTO> dtoList) {
         if (dtoList == null)
             return null;
 

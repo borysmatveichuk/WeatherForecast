@@ -102,7 +102,7 @@ public class PlaceSearchFragment extends Fragment implements ApiCallback<List<Pl
                 if (getActivity() == null)
                     return;
 
-                final List<Place> places = DTOFactory.INSTANCE.createPlaces(result);
+                final List<Place> places = DTOFactory.INSTANCE.createPlaceList(result);
                 adapter = new PlaceAdapter(getActivity(), places);
                 recyclerView.setAdapter(adapter);
 
