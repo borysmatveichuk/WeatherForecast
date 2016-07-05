@@ -15,6 +15,7 @@ import net.borkiss.weatherforecast.db.WeatherDbSchema.ForecastFiveDayTable;
 import net.borkiss.weatherforecast.db.WeatherDbSchema.PlacesTable;
 import net.borkiss.weatherforecast.dto.ForecastFiveDayDTO;
 import net.borkiss.weatherforecast.model.CurrentWeather;
+import net.borkiss.weatherforecast.model.ForecastFiveDay;
 import net.borkiss.weatherforecast.model.Place;
 
 import java.util.ArrayList;
@@ -54,11 +55,10 @@ public class WeatherStation {
         return values;
     }
 
-    private static ContentValues getContentValues(ForecastFiveDayDTO dto) {
+    private static ContentValues getContentValues(ForecastFiveDay forecast) {
         ContentValues values = new ContentValues();
-        values.put(ForecastFiveDayTable.Cols.TIME, dto.getTime());
-        values.put(ForecastFiveDayTable.Cols.PLACE_ID, dto.getPlaceId());
-        values.put(ForecastFiveDayTable.Cols.DOCUMENT, dto.getDocument());
+        values.put(ForecastFiveDayTable.Cols.TIME, forecast.getTime());
+        values.put(ForecastFiveDayTable.Cols.PLACE_ID, forecast.getPlaceId());
 
         return values;
     }
@@ -94,8 +94,8 @@ public class WeatherStation {
         );
     }
 
-    public void addForecastFiveDayDTO(ForecastFiveDayDTO dto) {
-        database.insert(ForecastFiveDayTable.NAME, null, getContentValues(dto));
+    public void addForecastFiveDayDTO(ForecastFiveDay forecast) {
+        database.insert(ForecastFiveDayTable.NAME, null, getContentValues(forecast));
     }
 
     public int addCurrentWeather(CurrentWeather weather) {

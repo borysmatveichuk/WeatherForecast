@@ -3,8 +3,10 @@ package net.borkiss.weatherforecast.api;
 import android.util.Log;
 
 import net.borkiss.weatherforecast.dto.CurrentWeatherDTO;
+import net.borkiss.weatherforecast.dto.ForecastFiveDayDTO;
 import net.borkiss.weatherforecast.dto.JSONAdapterFactory;
 import net.borkiss.weatherforecast.dto.PlaceDTO;
+import net.borkiss.weatherforecast.dto.WrapperForecastFiveDayDTO;
 import net.borkiss.weatherforecast.dto.WrapperSearchResultDTO;
 import net.borkiss.weatherforecast.util.Utils;
 import net.borkiss.weatherforecast.util.WeatherApplication;
@@ -68,13 +70,47 @@ public class WeatherApi extends WeatherRestAbs {
         execService.submit(task);
     }
 
-//    @Override
-    public HTTPResult doGetTest(String url) {
-        HTTPResult testResult = new HTTPResult();
-        testResult.setHttpCode(HTTP_OK);
-        //testResult.setContent(Utils.loadAssetTextAsString(WeatherApplication.getInstance().getApplicationContext(), "find_test_result"));
-        testResult.setContent(Utils.loadAssetTextAsString(WeatherApplication.getInstance().getApplicationContext(), "nikolaev_test_result"));
-        return testResult;
+    public void getFiveDayForecastByPlaceId(final int placeId,
+                                            final ApiCallback<List<ForecastFiveDayDTO>> callback) {
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+                final HTTPResult result = doGet(URIBuildHelper.createUriFiveDayWeather(placeId));
+
+                switch (result.getHttpCode()) {
+                    case HTTP_OK:
+                        callback.onSuccess(parseFiveDayForecastFromResult(result));
+                        break;
+                    case IO_EXCEPTION_ERROR:
+                        ApiError error = ApiError.IO_ERROR;
+                        error.setMessage(result.getContent());
+                        callback.onError(error);
+                        break;
+                    default:
+                        callback.onError(ApiError.SERVER_ERROR);
+                }
+            }
+        };
+
+        execService.submit(task);
+    }
+
+    private List<ForecastFiveDayDTO> parseFiveDayForecastFromResult(HTTPResult result) {
+
+        List<ForecastFiveDayDTO> forecastList= null;
+
+        if (result != null && result.getContent() != null) {
+            try {
+                WrapperForecastFiveDayDTO wrapper = JSONAdapterFactory.getForecastFiveDayWrapperAdapter()
+                        .createFromJSONString(result.getContent());
+
+                if (wrapper != null)
+                    forecastList = wrapper.getForecastList();
+            } catch (Exception e) {
+                Log.e(TAG, "error parsing " + e);
+            }
+        }
+        return forecastList;
     }
 
     private List<PlaceDTO> parsePlaceFromResult(HTTPResult result) {

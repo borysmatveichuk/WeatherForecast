@@ -24,9 +24,6 @@ public class ForecastFiveDayCursorWrapper extends CursorWrapper {
         String document = getString(getColumnIndex(ForecastFiveDayTable.Cols.DOCUMENT));
 
         ForecastFiveDayDTO dto = new ForecastFiveDayDTO();
-        dto.setPlaceId(placeId);
-        dto.setTime(time);
-        dto.setDocument(document);
 
         return dto;
     }

@@ -63,7 +63,7 @@ public class WeatherFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         placeName = (TextView) view.findViewById(R.id.txtPlace);
-        placeName.setText(place.getName() + new Date().toString());
+        placeName.setText(place.getName());
 
         txtWeather = (TextView) view.findViewById(R.id.txtWeather);
         txtDate = (TextView) view.findViewById(R.id.txtDate);
@@ -85,13 +85,16 @@ public class WeatherFragment extends Fragment {
     }
 
     private String formatDate(Date date) {
+        if (date == null)
+            return "";
+
         Calendar cal = Calendar.getInstance();
         TimeZone tz = cal.getTimeZone();
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
         sdf.setTimeZone(tz);
 
-        String localTime = sdf.format(date); // I assume your timestamp is in seconds and you're converting to milliseconds?
+        String localTime = sdf.format(date);
         return localTime;
     }
 

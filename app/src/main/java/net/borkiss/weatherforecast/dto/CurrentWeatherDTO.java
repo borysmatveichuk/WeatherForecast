@@ -84,12 +84,12 @@ public class CurrentWeatherDTO implements Serializable {
         return clouds.all;
     }
 
-    private class Weather {
+    public static class Weather {
         String main;
         String description;
     }
 
-    private class Main {
+    public static class Main {
         float temp;
         float pressure;
         int humidity;
@@ -97,12 +97,12 @@ public class CurrentWeatherDTO implements Serializable {
         float temp_max;
     }
 
-    private class Wind {
+    public static class Wind {
         float speed;
         float deg;
     }
 
-    private class Clouds {
+    public static class Clouds {
         int all;
     }
 }

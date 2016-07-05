@@ -11,9 +11,6 @@ public class WeatherApplication extends Application {
 
     private volatile static WeatherApplication instance;
 
-    private final ExecutorService executor = Executors.newCachedThreadPool();
-    private final Handler uiHandler = new Handler(Looper.getMainLooper());
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -24,17 +21,4 @@ public class WeatherApplication extends Application {
         return instance;
     }
 
-    /**
-     * @return the executor
-     */
-    public ExecutorService getExecutor() {
-        return executor;
-    }
-
-    /**
-     * @return the uiHandler
-     */
-    public Handler getUiHandler() {
-        return uiHandler;
-    }
 }

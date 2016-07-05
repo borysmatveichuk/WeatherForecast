@@ -50,7 +50,22 @@ public class WeatherService extends IntentService {
         }
     };
 
-    private ApiCallback<ForecastFiveDayDTO> fiveDayDTOCallback;
+    private ApiCallback<List<ForecastFiveDayDTO>> fiveDayDTOCallback = new ApiCallback<List<ForecastFiveDayDTO>>() {
+        @Override
+        public void onSuccess(List<ForecastFiveDayDTO> result) {
+            if (result == null)
+                return;
+
+            for (ForecastFiveDayDTO dto: result) {
+                Log.d(TAG, dto.getWeatherMain() + " " +dto.getPlaceId());
+            }
+        }
+
+        @Override
+        public void onError(ApiError error) {
+            Log.e(TAG, "Can't write to db! " + error);
+        }
+    };
 
 
     public static Intent newIntent(Context context) {
@@ -77,6 +92,8 @@ public class WeatherService extends IntentService {
         List<Place> places = WeatherStation.getInstance(this).getPlaces();
         for (Place place : places) {
             api.getCurrentWeather(place.getCityId(), currentWeatherCallback);
+            api.getFiveDayForecastByPlaceId(place.getCityId(), fiveDayDTOCallback);
+            Log.i(TAG, "Get weather for: " + place.getName());
         }
 
     }

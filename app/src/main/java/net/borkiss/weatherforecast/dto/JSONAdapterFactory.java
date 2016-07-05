@@ -12,6 +12,7 @@ public class JSONAdapterFactory {
     private static JSONPlaceAdapter placeAdapter;
     private static JSONSearchResultWrapperAdapter searchResultWrapperAdapter;
     private static JSONCurrentWeatherAdapter currentWeatherAdapter;
+    private static JSONForecastFiveDayWrapperAdapter forecastFiveDayWrapperAdapter;
 
     public static class JSONPlaceAdapter extends JSONEntityAdapter<PlaceDTO> {
 
@@ -64,6 +65,23 @@ public class JSONAdapterFactory {
         }
     }
 
+    public static class JSONForecastFiveDayWrapperAdapter extends JSONEntityAdapter<WrapperForecastFiveDayDTO> {
+
+        private JSONForecastFiveDayWrapperAdapter() {
+        }
+
+        @Override
+        protected Class<WrapperForecastFiveDayDTO> getType() {
+            return WrapperForecastFiveDayDTO.class;
+        }
+
+        @Override
+        protected Type getCollectionType() {
+            return new TypeToken<List<WrapperForecastFiveDayDTO>>() {
+            }.getType();
+        }
+    }
+
     public synchronized static JSONPlaceAdapter getJsonPlaceAdapter() {
         if (placeAdapter == null)
             placeAdapter = new JSONPlaceAdapter();
@@ -80,6 +98,12 @@ public class JSONAdapterFactory {
         if (currentWeatherAdapter == null)
             currentWeatherAdapter = new JSONCurrentWeatherAdapter();
         return currentWeatherAdapter;
+    }
+
+    public synchronized static JSONForecastFiveDayWrapperAdapter getForecastFiveDayWrapperAdapter() {
+        if (forecastFiveDayWrapperAdapter == null)
+            forecastFiveDayWrapperAdapter = new JSONForecastFiveDayWrapperAdapter();
+        return forecastFiveDayWrapperAdapter;
     }
 
 }
