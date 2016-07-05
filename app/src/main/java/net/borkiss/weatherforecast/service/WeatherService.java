@@ -21,6 +21,7 @@ import net.borkiss.weatherforecast.dto.CurrentWeatherDTO;
 import net.borkiss.weatherforecast.dto.DTOFactory;
 import net.borkiss.weatherforecast.dto.ForecastFiveDayDTO;
 import net.borkiss.weatherforecast.model.CurrentWeather;
+import net.borkiss.weatherforecast.model.ForecastFiveDay;
 import net.borkiss.weatherforecast.model.Place;
 
 import java.util.List;
@@ -56,7 +57,8 @@ public class WeatherService extends IntentService {
             if (result == null)
                 return;
 
-            for (ForecastFiveDayDTO dto: result) {
+            final List<ForecastFiveDay> forecastList = DTOFactory.INSTANCE.createForecastFiveDayList(result);
+            for (ForecastFiveDay dto: forecastList) {
                 Log.d(TAG, dto.getWeatherMain() + " " +dto.getPlaceId());
             }
         }

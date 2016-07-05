@@ -1,6 +1,7 @@
 package net.borkiss.weatherforecast.dto;
 
 import net.borkiss.weatherforecast.model.CurrentWeather;
+import net.borkiss.weatherforecast.model.ForecastFiveDay;
 import net.borkiss.weatherforecast.model.Place;
 
 import java.util.ArrayList;
@@ -55,4 +56,38 @@ public enum DTOFactory {
 
         return currentWeather;
     }
+
+    public ForecastFiveDay createForecastFiveDay(ForecastFiveDayDTO dto) {
+        if (dto == null)
+            return null;
+
+        ForecastFiveDay forecast = new ForecastFiveDay();
+        forecast.setTime(dto.getTime());
+        forecast.setPlaceId(dto.getPlaceId());
+        forecast.setWeatherMain(dto.getWeatherMain());
+        forecast.setWeatherDescription(dto.getWeatherDescription());
+        forecast.setTemperature(dto.getTemperature());
+        forecast.setPressure(dto.getPressure());
+        forecast.setHumidity(dto.getHumidity());
+        forecast.setMinTemperature(dto.getMinTemperature());
+        forecast.setMaxTemperature(dto.getMaxTemperature());
+        forecast.setWindSpeed(dto.getWindSpeed());
+        forecast.setWindDegree(dto.getWindDegree());
+        forecast.setClouds(dto.getClouds());
+
+        return forecast;
+    }
+
+    public List<ForecastFiveDay> createForecastFiveDayList(List<ForecastFiveDayDTO> dtoList) {
+        if (dtoList == null)
+            return null;
+
+        List<ForecastFiveDay> list = new ArrayList<>();
+        for (ForecastFiveDayDTO dto : dtoList) {
+            list.add(createForecastFiveDay(dto));
+        }
+
+        return list;
+    }
+
 }

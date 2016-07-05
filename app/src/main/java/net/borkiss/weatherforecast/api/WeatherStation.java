@@ -57,8 +57,6 @@ public class WeatherStation {
 
     private static ContentValues getContentValues(ForecastFiveDay forecast) {
         ContentValues values = new ContentValues();
-        values.put(ForecastFiveDayTable.Cols.TIME, forecast.getTime());
-        values.put(ForecastFiveDayTable.Cols.PLACE_ID, forecast.getPlaceId());
 
         return values;
     }
