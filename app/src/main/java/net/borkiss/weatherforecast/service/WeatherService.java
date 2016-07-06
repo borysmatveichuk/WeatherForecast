@@ -39,10 +39,12 @@ public class WeatherService extends IntentService {
                 return;
 
             final CurrentWeather currentWeather = DTOFactory.INSTANCE.createCurrentWeather(result);
-            int count = WeatherStation.getInstance(WeatherService.this).addCurrentWeather(currentWeather);
+            int count = instance.addCurrentWeather(currentWeather);
             if (count > 0) {
-                Log.d(TAG, "Added " + count + " record(s) to DB.");
-            }
+                Log.d(TAG, "Added current weather " + count + " record(s) to DB.");
+            } else {
+                Log.e(TAG, "Can't add current weather to DB!");
+        }
         }
 
         @Override
@@ -58,9 +60,29 @@ public class WeatherService extends IntentService {
                 return;
 
             final List<ForecastFiveDay> forecastList = DTOFactory.INSTANCE.createForecastFiveDayList(result);
-            for (ForecastFiveDay dto: forecastList) {
-                Log.d(TAG, dto.getWeatherMain() + " " +dto.getPlaceId());
+
+            if (!forecastList.isEmpty()) {
+                instance.deleteFiveDayForecastByPlaceId(forecastList.get(0).getPlaceId());
+
+
+                int count = instance.addListFiveDayForecast(forecastList);
+
+                /*
+                int count = 0;
+
+                for (ForecastFiveDay forecast : forecastList) {
+                    instance.addForecastFiveDay(forecast);
+                    count++;
+                }
+                */
+
+                if (count > 0) {
+                    Log.d(TAG, "Added forecast " + count + " record(s) to DB.");
+                } else {
+                    Log.e(TAG, "Can't add 5 day forecast to DB!");
+                }
             }
+
         }
 
         @Override
@@ -69,6 +91,7 @@ public class WeatherService extends IntentService {
         }
     };
 
+    private WeatherStation instance;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, WeatherService.class);
@@ -77,8 +100,15 @@ public class WeatherService extends IntentService {
     public WeatherService() {
         this(TAG);
     }
+
     public WeatherService(String name) {
         super(name);
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        instance = WeatherStation.getInstance(this);
     }
 
     @Override
@@ -91,11 +121,13 @@ public class WeatherService extends IntentService {
 
         WeatherApi api = new WeatherApi();
 
-        List<Place> places = WeatherStation.getInstance(this).getPlaces();
+        List<Place> places = instance.getPlaces();
         for (Place place : places) {
+            Log.i(TAG, "Get weather for: " + place.getName());
+
             api.getCurrentWeather(place.getCityId(), currentWeatherCallback);
             api.getFiveDayForecastByPlaceId(place.getCityId(), fiveDayDTOCallback);
-            Log.i(TAG, "Get weather for: " + place.getName());
+
         }
 
     }

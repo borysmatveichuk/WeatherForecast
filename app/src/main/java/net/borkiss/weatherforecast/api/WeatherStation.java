@@ -74,7 +74,7 @@ public class WeatherStation {
         return values;
     }
 
-    private ContentValues getContentValues(CurrentWeather weather) {
+    private static ContentValues getContentValues(CurrentWeather weather) {
         ContentValues values = new ContentValues();
         values.put(CurrentWeatherTable.Cols.TIME, weather.getTime().getTime());
         values.put(CurrentWeatherTable.Cols.PLACE_ID, weather.getPlaceId());
@@ -101,11 +101,11 @@ public class WeatherStation {
         return database.delete(
                 PlacesTable.NAME,
                 PlacesTable.Cols.CITY_ID + " = ? ",
-                new String[] {Integer.toString(place.getCityId())}
+                new String[]{Integer.toString(place.getCityId())}
         );
     }
 
-    public void addForecastFiveDayDTO(ForecastFiveDay forecast) {
+    public void addForecastFiveDay(ForecastFiveDay forecast) {
         database.insert(ForecastFiveDayTable.NAME, null, getContentValues(forecast));
     }
 
@@ -231,8 +231,30 @@ public class WeatherStation {
         return forecastList;
     }
 
-    public void deleteFiveDayForecastByPlaceId(final int cityId)
-    {
+    public List<ForecastFiveDay> getListForecastFiveDayByCityId(int cityId) {
+
+        List<ForecastFiveDay> forecastList = new ArrayList<>();
+
+        String whereClause = ForecastFiveDayTable.Cols.PLACE_ID + " = ? ";
+        String[] whereArgs = {Integer.toString(cityId)};
+
+        ForecastFiveDayCursorWrapper cursor = queryForecastFiveDay(whereClause, whereArgs);
+
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                forecastList.add(cursor.getForecastFiveDay());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return forecastList;
+    }
+
+
+    public void deleteFiveDayForecastByPlaceId(final int cityId) {
         final String ROUTE_TABLE_DELETE =
                 "DELETE FROM " + ForecastFiveDayTable.NAME
                         + " WHERE "
@@ -247,9 +269,70 @@ public class WeatherStation {
             statement.execute();
             statement.clearBindings();
             database.setTransactionSuccessful();
+            Log.d(TAG, "FiveDayForecastByPlaceId deleted");
+        } catch (Exception e) {
+            Log.e(TAG, "Error when deleting FiveDayForecastByPlaceId " + e.getMessage());
         } finally {
             database.endTransaction();
         }
+    }
+
+    public int addListFiveDayForecast(List<ForecastFiveDay> forecastFiveDayList) {
+
+        int count = 0;
+
+        String sql = "INSERT OR REPLACE INTO " + ForecastFiveDayTable.NAME + " ( " +
+                ForecastFiveDayTable.Cols.TIME + ", " +
+                ForecastFiveDayTable.Cols.PLACE_ID + ", " +
+                ForecastFiveDayTable.Cols.WEATHER_MAIN + ", " +
+                ForecastFiveDayTable.Cols.WEATHER_DESCRIPTION + ", " +
+                ForecastFiveDayTable.Cols.TEMPERATURE + ", " +
+                ForecastFiveDayTable.Cols.PRESSURE + ", " +
+                ForecastFiveDayTable.Cols.HUMIDITY + ", " +
+                ForecastFiveDayTable.Cols.MIN_TEMPERATURE + ", " +
+                ForecastFiveDayTable.Cols.MAX_TEMPERATURE + ", " +
+                ForecastFiveDayTable.Cols.WIND_SPEED + ", " +
+                ForecastFiveDayTable.Cols.WIND_DEGREE + ", " +
+                ForecastFiveDayTable.Cols.CLOUDS +
+                " ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+
+        SQLiteStatement statement = database.compileStatement(sql);
+
+        database.beginTransactionNonExclusive();
+
+        try {
+            for (ForecastFiveDay forecast : forecastFiveDayList) {
+
+                statement.bindLong(1, forecast.getTime().getTime());
+                statement.bindLong(2, forecast.getPlaceId());
+                statement.bindString(3, forecast.getWeatherMain());
+                statement.bindString(4, forecast.getWeatherDescription());
+                statement.bindDouble(5, forecast.getTemperature());
+                statement.bindDouble(6, forecast.getPressure());
+                statement.bindLong(7, forecast.getHumidity());
+                statement.bindDouble(8, forecast.getMinTemperature());
+                statement.bindDouble(9, forecast.getMaxTemperature());
+                statement.bindDouble(10, forecast.getWindSpeed());
+                statement.bindDouble(11, forecast.getWindDegree());
+                statement.bindLong(12, forecast.getClouds());
+
+                statement.execute();
+                statement.clearBindings();
+                count++;
+            }
+            database.setTransactionSuccessful();
+
+            Log.d(TAG, "ListFiveDayForecast inserted " + count + " records for " +
+                    forecastFiveDayList.get(0).getPlaceId());
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error when inserting ListFiveDayForecast " + e.getMessage());
+        } finally {
+            database.endTransaction();
+        }
+
+        return count;
+
     }
 
     private PlaceCursorWrapper queryPlaces(String whereClause, String[] whereArgs) {
