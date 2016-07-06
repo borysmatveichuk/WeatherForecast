@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import net.borkiss.weatherforecast.R;
 import net.borkiss.weatherforecast.model.ForecastFiveDay;
+import net.borkiss.weatherforecast.util.Utils;
 
 import java.util.List;
 
@@ -67,9 +68,9 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
         }
 
         public void bind(ForecastFiveDay forecast) {
-            txtTime.setText(forecast.getTime().toString());
+            txtTime.setText(Utils.formatTime(forecast.getTime()));
             txtWeather.setText(forecast.getWeatherMain());
-            txtTemperature.setText(Float.toString(forecast.getTemperature()));
+            txtTemperature.setText(Utils.formatTemperature(context, forecast.getTemperature()));
         }
 
         @Override

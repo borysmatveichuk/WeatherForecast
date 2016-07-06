@@ -43,13 +43,6 @@ public class PageContainerFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        Intent intent = WeatherService.newIntent(getActivity());
-        getActivity().startService(intent);
-
-        if (!WeatherService.isServiceAlarmOn(getActivity())) {
-            WeatherService.setServiceAlarm(getActivity(), true);
-        }
     }
 
     @Nullable

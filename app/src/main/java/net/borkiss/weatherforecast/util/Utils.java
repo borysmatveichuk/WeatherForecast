@@ -1,16 +1,53 @@
 package net.borkiss.weatherforecast.util;
 
 import android.content.Context;
-import android.content.ContextWrapper;
+
 import android.util.Log;
+
+import net.borkiss.weatherforecast.R;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class Utils {
     private static final String TAG = Utils.class.getSimpleName();
+
+    public static String formatTemperature(Context context, double temperature) {
+        return String.format(context.getString(R.string.format_temperature), temperature);
+    }
+
+    public static String formatDate(Date date) {
+        if (date == null)
+            return "";
+
+        Calendar cal = Calendar.getInstance();
+        TimeZone tz = cal.getTimeZone();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+        sdf.setTimeZone(tz);
+
+        return sdf.format(date);
+    }
+
+    public static String formatTime(Date date) {
+        if (date == null)
+            return "";
+
+        Calendar cal = Calendar.getInstance();
+        TimeZone tz = cal.getTimeZone();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        sdf.setTimeZone(tz);
+
+        return sdf.format(date);
+    }
 
     public static String loadAssetTextAsString(Context context, String name) {
         BufferedReader in = null;

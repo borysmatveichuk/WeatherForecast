@@ -23,6 +23,7 @@ import net.borkiss.weatherforecast.dto.CurrentWeatherDTO;
 import net.borkiss.weatherforecast.model.CurrentWeather;
 import net.borkiss.weatherforecast.model.ForecastFiveDay;
 import net.borkiss.weatherforecast.model.Place;
+import net.borkiss.weatherforecast.util.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -38,9 +39,13 @@ public class WeatherFragment extends Fragment {
     private Place place;
     private TextView placeName;
     private TextView txtWeather;
+    private TextView txtWeatherDescription;
     private TextView txtDate;
+    private TextView txtTemperature;
+
     private RecyclerView recyclerView;
     private ForecastAdapter adapter;
+
 
     public static WeatherFragment newInstance(Place place) {
 
@@ -73,7 +78,10 @@ public class WeatherFragment extends Fragment {
         placeName.setText(place.getName());
 
         txtWeather = (TextView) view.findViewById(R.id.txtWeather);
+        txtWeatherDescription = (TextView) view.findViewById(R.id.txtWeatherDescription);
         txtDate = (TextView) view.findViewById(R.id.txtDate);
+        txtTemperature = (TextView) view.findViewById(R.id.txtTemperature);
+
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
@@ -94,20 +102,6 @@ public class WeatherFragment extends Fragment {
         updateUI();
     }
 
-    private String formatDate(Date date) {
-        if (date == null)
-            return "";
-
-        Calendar cal = Calendar.getInstance();
-        TimeZone tz = cal.getTimeZone();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
-        sdf.setTimeZone(tz);
-
-        String localTime = sdf.format(date);
-        return localTime;
-    }
-
     private void updateUI() {
         CurrentWeather weather = WeatherStation.getInstance(getActivity())
                 .getCurrentWeatherByCityId(place.getCityId());
@@ -115,8 +109,12 @@ public class WeatherFragment extends Fragment {
         List<ForecastFiveDay> forecastFiveDayList = WeatherStation.getInstance(getActivity())
                 .getListForecastFiveDayByCityId(place.getCityId());
 
-        txtWeather.setText(weather.toString());
-        txtDate.setText(formatDate(weather.getTime()));
+        txtWeather.setText(weather.getWeatherMain());
+        txtWeatherDescription.setText(weather.getWeatherDescription());
+        txtDate.setText(Utils.formatDate(weather.getTime()));
+
+        String temperature = Utils.formatTemperature(getActivity(), weather.getTemperature());
+        txtTemperature.setText(temperature);
 
         if (adapter == null) {
             adapter = new ForecastAdapter(getActivity(), forecastFiveDayList);

@@ -4,24 +4,28 @@
               android:orientation="vertical"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:minHeight="?android:attr/listPreferredItemHeight">
+              android:minHeight="?android:attr/listPreferredItemHeight"
+    android:layout_margin="2dp">
 
     <TextView
         android:id="@+id/txtTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         tool:text="01/01/2016" />
 
     <TextView
         android:id="@+id/txtWeather"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         tool:text="Rain" />
 
     <TextView
         android:id="@+id/txtTemperature"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         tool:text="+35" />
 
 </LinearLayout>
