@@ -30,7 +30,7 @@ public class WeatherService extends IntentService {
 
     private static final String TAG = WeatherService.class.getSimpleName();
 
-    private static final int INTERVAL = 1000 * 60 * 10; // 15 MINUTES
+    private static final int INTERVAL = 1000 * 60 * 2; // 15 MINUTES
 
     private ApiCallback<CurrentWeatherDTO> currentWeatherCallback = new ApiCallback<CurrentWeatherDTO>() {
         @Override
@@ -155,7 +155,8 @@ public class WeatherService extends IntentService {
         AlarmManager alarmManager = (AlarmManager)
                 context.getSystemService(Context.ALARM_SERVICE);
         if (isOn) {
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
+            //alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
+            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME,
                     SystemClock.elapsedRealtime(), INTERVAL, pi);
         } else {
             alarmManager.cancel(pi);
