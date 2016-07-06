@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,17 +14,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.borkiss.weatherforecast.R;
+import net.borkiss.weatherforecast.adapter.ForecastAdapter;
 import net.borkiss.weatherforecast.api.ApiCallback;
 import net.borkiss.weatherforecast.api.ApiError;
 import net.borkiss.weatherforecast.api.WeatherApi;
 import net.borkiss.weatherforecast.api.WeatherStation;
 import net.borkiss.weatherforecast.dto.CurrentWeatherDTO;
 import net.borkiss.weatherforecast.model.CurrentWeather;
+import net.borkiss.weatherforecast.model.ForecastFiveDay;
 import net.borkiss.weatherforecast.model.Place;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -34,6 +39,8 @@ public class WeatherFragment extends Fragment {
     private TextView placeName;
     private TextView txtWeather;
     private TextView txtDate;
+    private RecyclerView recyclerView;
+    private ForecastAdapter adapter;
 
     public static WeatherFragment newInstance(Place place) {
 
@@ -67,6 +74,9 @@ public class WeatherFragment extends Fragment {
 
         txtWeather = (TextView) view.findViewById(R.id.txtWeather);
         txtDate = (TextView) view.findViewById(R.id.txtDate);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -99,10 +109,22 @@ public class WeatherFragment extends Fragment {
     }
 
     private void updateUI() {
-        CurrentWeather weather = WeatherStation.getInstance(getActivity()).getCurrentWeatherByCityId(place.getCityId());
+        CurrentWeather weather = WeatherStation.getInstance(getActivity())
+                .getCurrentWeatherByCityId(place.getCityId());
+
+        List<ForecastFiveDay> forecastFiveDayList = WeatherStation.getInstance(getActivity())
+                .getListForecastFiveDayByCityId(place.getCityId());
 
         txtWeather.setText(weather.toString());
         txtDate.setText(formatDate(weather.getTime()));
+
+        if (adapter == null) {
+            adapter = new ForecastAdapter(getActivity(), forecastFiveDayList);
+            recyclerView.setAdapter(adapter);
+        } else {
+            adapter.setForecastList(forecastFiveDayList);
+            adapter.notifyDataSetChanged();
+        }
     }
 
 }

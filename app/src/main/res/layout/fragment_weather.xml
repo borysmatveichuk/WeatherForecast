@@ -22,26 +22,31 @@
                 <TextView
                     android:id="@+id/txtPlace"
                     android:layout_width="match_parent"
-                    android:layout_height="14sp"
+                    android:layout_height="wrap_content"
                     android:text="@string/app_name" />
 
                 <TextView
                     android:id="@+id/txtDate"
                     android:layout_width="match_parent"
-                    android:layout_height="14sp"
+                    android:layout_height="wrap_content"
                     tools:text="01/01/2016" />
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="14sp"
+                    android:layout_height="wrap_content"
                     android:labelFor="@id/txtDate"
                     android:text="Date: " />
 
                 <TextView
                     android:id="@+id/txtWeather"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     tools:text="Current weather" />
+
+                <include layout="@layout/fragment_place_list"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content" />
+
             </LinearLayout>
         </ScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
