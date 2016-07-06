@@ -5,9 +5,9 @@ import android.util.Log;
 
 import net.borkiss.weatherforecast.api.WeatherStation;
 import net.borkiss.weatherforecast.db.WeatherBaseHelper;
-import net.borkiss.weatherforecast.dto.CurrentWeatherDTO;
 import net.borkiss.weatherforecast.dto.ForecastFiveDayDTO;
 import net.borkiss.weatherforecast.model.CurrentWeather;
+import net.borkiss.weatherforecast.model.ForecastFiveDay;
 import net.borkiss.weatherforecast.model.Place;
 
 import org.junit.After;
@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Date;
 import java.util.List;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -85,11 +86,11 @@ public class DatabaseTest {
 
     private void insertSelectCurrentWeather() throws Exception {
         CurrentWeather dto = new CurrentWeather();
-        dto.setTime(123456789);
+        dto.setTime(new Date(1467651600));
         dto.setPlaceId(111);
 
         CurrentWeather dto2 = new CurrentWeather();
-        dto2.setTime(99999999L);
+        dto2.setTime(new Date(1467651600));
         dto2.setPlaceId(222);
 
 
@@ -100,42 +101,45 @@ public class DatabaseTest {
 
         assertThat(listAdded.size(), is(2));
 
-        assertThat(listAdded.get(1).getTime(), is(99999999L));
+        assertThat(listAdded.get(1).getTime(), is(new Date(1467651600)));
         assertThat(listAdded.get(1).getPlaceId(), is(222));
 
         CurrentWeather dto3 = new CurrentWeather();
-        dto3.setTime(987654321L);
+        dto3.setTime(new Date(1467651600));
         dto3.setPlaceId(111);
         //must bu updated
         assertThat(sqLiteDatabase.addCurrentWeather(dto3), is(1));
         assertThat(listAdded.size(), is(2));
 
         List<CurrentWeather> listUpdated = sqLiteDatabase.getListCurrentWeather();
-        assertThat(listUpdated.get(0).getTime(), is(987654321L));
+        assertThat(listUpdated.get(0).getTime(), is(new Date(1467651600)));
     }
 
     private void insertSelectForecastFiveDayDTO() throws Exception {
-        ForecastFiveDayDTO dto = new ForecastFiveDayDTO();
-        dto.setDocument("dto");
-        dto.setTime(1111L);
+        ForecastFiveDay dto = new ForecastFiveDay();
+        dto.setTime(new Date(1467651600));
         dto.setPlaceId(111);
 
-        ForecastFiveDayDTO dto2 = new ForecastFiveDayDTO();
-        dto2.setDocument("{\"coord\":{\"lon\":32,\"lat\":46.97},\"weather\":[{\"id\":500,\"main\":\"Rain\",\"description\":\"light rain\",\"icon\":\"10n\"}],\"base\":\"stations\",\"main\":{\"temp\":297.915,\"pressure\":1014.89,\"humidity\":76,\"temp_min\":297.915,\"temp_max\":297.915,\"sea_level\":1018.96,\"grnd_level\":1014.89},\"wind\":{\"speed\":2.67,\"deg\":27.5058},\"rain\":{\"3h\":0.675},\"clouds\":{\"all\":76},\"dt\":1467067225,\"sys\":{\"message\":0.0382,\"country\":\"UA\",\"sunrise\":1466992774,\"sunset\":1467049855},\"id\":700569,\"name\":\"Mykolayiv\",\"cod\":200}");
-        dto2.setTime(2222L);
+        ForecastFiveDay dto2 = new ForecastFiveDay();
+        dto2.setTime(new Date(1467651600));
         dto2.setPlaceId(222);
 
 
         sqLiteDatabase.addForecastFiveDayDTO(dto);
         sqLiteDatabase.addForecastFiveDayDTO(dto2);
 
-        List<ForecastFiveDayDTO> list = sqLiteDatabase.getListForecastFiveDayDTO();
+        List<ForecastFiveDay> list = sqLiteDatabase.getListForecastFiveDay();
 
         assertThat(list.size(), is(2));
 
-        assertTrue(list.get(1).getDocument().subSequence(33, 40).equals("weather"));
-        assertThat(list.get(1).getTime(), is(2222L));
+        assertThat(list.get(1).getTime(), is(new Date(1467651600)));
         assertThat(list.get(1).getPlaceId(), is(222));
 
+        sqLiteDatabase.deleteFiveDayForecastByPlaceId(dto.getPlaceId());
+        sqLiteDatabase.deleteFiveDayForecastByPlaceId(dto2.getPlaceId());
+
+        List<ForecastFiveDay> listAfterDelete = sqLiteDatabase.getListForecastFiveDay();
+
+        assertThat(listAfterDelete.size(), is(0));
     }
 }

@@ -59,7 +59,18 @@ public class WeatherStation {
 
     private static ContentValues getContentValues(ForecastFiveDay forecast) {
         ContentValues values = new ContentValues();
-
+        values.put(ForecastFiveDayTable.Cols.TIME, forecast.getTime().getTime());
+        values.put(ForecastFiveDayTable.Cols.PLACE_ID, forecast.getPlaceId());
+        values.put(ForecastFiveDayTable.Cols.WEATHER_MAIN, forecast.getWeatherMain());
+        values.put(ForecastFiveDayTable.Cols.WEATHER_DESCRIPTION, forecast.getWeatherDescription());
+        values.put(ForecastFiveDayTable.Cols.TEMPERATURE, forecast.getTemperature());
+        values.put(ForecastFiveDayTable.Cols.PRESSURE, forecast.getPressure());
+        values.put(ForecastFiveDayTable.Cols.HUMIDITY, forecast.getHumidity());
+        values.put(ForecastFiveDayTable.Cols.MIN_TEMPERATURE, forecast.getMinTemperature());
+        values.put(ForecastFiveDayTable.Cols.MAX_TEMPERATURE, forecast.getMaxTemperature());
+        values.put(ForecastFiveDayTable.Cols.WIND_SPEED, forecast.getWindSpeed());
+        values.put(ForecastFiveDayTable.Cols.WIND_DEGREE, forecast.getWindDegree());
+        values.put(ForecastFiveDayTable.Cols.CLOUDS, forecast.getClouds());
         return values;
     }
 
@@ -166,20 +177,20 @@ public class WeatherStation {
 
     public List<CurrentWeather> getListCurrentWeather() {
 
-        List<CurrentWeather> weathers = new ArrayList<>();
+        List<CurrentWeather> weatherList = new ArrayList<>();
         CurrentWeatherCursorWrapper cursor = queryCurrentWeather(null, null);
 
         try {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                weathers.add(cursor.getCurrentWeather());
+                weatherList.add(cursor.getCurrentWeather());
                 cursor.moveToNext();
             }
         } finally {
             cursor.close();
         }
 
-        return weathers;
+        return weatherList;
     }
 
     public CurrentWeather getCurrentWeatherByCityId(int cityId) {
@@ -202,33 +213,43 @@ public class WeatherStation {
         return weather;
     }
 
-    public List<ForecastFiveDayDTO> getListForecastFiveDayDTO() {
+    public List<ForecastFiveDay> getListForecastFiveDay() {
 
-        List<ForecastFiveDayDTO> dto = new ArrayList<>();
+        List<ForecastFiveDay> forecastList = new ArrayList<>();
         ForecastFiveDayCursorWrapper cursor = queryForecastFiveDay(null, null);
 
         try {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                dto.add(cursor.getForecastFiveDayDTO());
+                forecastList.add(cursor.getForecastFiveDay());
                 cursor.moveToNext();
             }
         } finally {
             cursor.close();
         }
 
-        return dto;
+        return forecastList;
     }
 
-    //EXAMPLE
-    public void deleteFiveDayForecast(final int cityId)
+    public void deleteFiveDayForecastByPlaceId(final int cityId)
     {
         final String ROUTE_TABLE_DELETE =
-                "DELETE FROM route WHERE " + BaseColumns._ID + " = ?";
+                "DELETE FROM " + ForecastFiveDayTable.NAME
+                        + " WHERE "
+                        + ForecastFiveDayTable.Cols.PLACE_ID
+                        + " = ?";
 
-        final SQLiteStatement delete = database.compileStatement(ROUTE_TABLE_DELETE);
-        delete.bindLong(1, cityId);
-        delete.execute();
+        final SQLiteStatement statement = database.compileStatement(ROUTE_TABLE_DELETE);
+
+        database.beginTransactionNonExclusive();
+        try {
+            statement.bindLong(1, cityId);
+            statement.execute();
+            statement.clearBindings();
+            database.setTransactionSuccessful();
+        } finally {
+            database.endTransaction();
+        }
     }
 
     private PlaceCursorWrapper queryPlaces(String whereClause, String[] whereArgs) {
