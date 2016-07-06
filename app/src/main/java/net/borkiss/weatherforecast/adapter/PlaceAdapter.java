@@ -57,8 +57,6 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceHolder>
 
     public class PlaceHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private Place place;
-
         private TextView placeName;
         private TextView placeCountry;
         private Button delete;
@@ -74,8 +72,6 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceHolder>
         }
 
         public void bind(Place place) {
-            this.place = place;
-
             placeName.setText(place.getName());
             placeCountry.setText(place.getCountry());
         }
