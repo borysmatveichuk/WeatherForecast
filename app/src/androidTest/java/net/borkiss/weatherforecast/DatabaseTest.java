@@ -5,7 +5,6 @@ import android.util.Log;
 
 import net.borkiss.weatherforecast.api.WeatherStation;
 import net.borkiss.weatherforecast.db.WeatherBaseHelper;
-import net.borkiss.weatherforecast.dto.ForecastFiveDayDTO;
 import net.borkiss.weatherforecast.model.CurrentWeather;
 import net.borkiss.weatherforecast.model.ForecastFiveDay;
 import net.borkiss.weatherforecast.model.Place;
@@ -15,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -44,7 +44,10 @@ public class DatabaseTest {
 
     @After
     public void tearDown() throws Exception {
-        //database.close();
+        if (getTargetContext().deleteDatabase(WeatherBaseHelper.DATABASE_NAME))
+            Log.d(TAG, "DB deleted");
+        else
+            Log.e(TAG, "Can't delete DB");
     }
 
     @Test
@@ -125,8 +128,8 @@ public class DatabaseTest {
         dto2.setPlaceId(222);
 
 
-        sqLiteDatabase.addForecastFiveDayDTO(dto);
-        sqLiteDatabase.addForecastFiveDayDTO(dto2);
+        sqLiteDatabase.addForecastFiveDay(dto);
+        sqLiteDatabase.addForecastFiveDay(dto2);
 
         List<ForecastFiveDay> list = sqLiteDatabase.getListForecastFiveDay();
 
@@ -141,5 +144,18 @@ public class DatabaseTest {
         List<ForecastFiveDay> listAfterDelete = sqLiteDatabase.getListForecastFiveDay();
 
         assertThat(listAfterDelete.size(), is(0));
+
+        List<ForecastFiveDay> listForInsert = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            ForecastFiveDay forecast = new ForecastFiveDay();
+            forecast.setPlaceId(999);
+            forecast.setTime(new Date(1467651600));
+            forecast.setWeatherMain("Rain");
+            forecast.setWeatherDescription("Light rain");
+            listForInsert.add(forecast);
+        }
+
+        assertThat(sqLiteDatabase.addListFiveDayForecast(listForInsert), is(100));
+
     }
 }
