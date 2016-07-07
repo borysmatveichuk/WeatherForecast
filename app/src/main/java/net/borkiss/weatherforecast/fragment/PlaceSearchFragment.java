@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import net.borkiss.weatherforecast.R;
+import net.borkiss.weatherforecast.adapter.DividerItemDecoration;
 import net.borkiss.weatherforecast.adapter.PlaceAdapter;
 import net.borkiss.weatherforecast.api.ApiCallback;
 import net.borkiss.weatherforecast.api.ApiError;
@@ -64,6 +65,9 @@ public class PlaceSearchFragment extends Fragment implements ApiCallback<List<Pl
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getActivity(),
+                LinearLayoutManager.VERTICAL);
+        recyclerView.addItemDecoration(itemDecoration);
     }
 
     @Override

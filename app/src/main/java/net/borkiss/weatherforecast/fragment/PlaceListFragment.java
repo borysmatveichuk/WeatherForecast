@@ -8,8 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,13 +17,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import net.borkiss.weatherforecast.R;
+import net.borkiss.weatherforecast.adapter.DividerItemDecoration;
 import net.borkiss.weatherforecast.adapter.PlaceAdapter;
-import net.borkiss.weatherforecast.api.ApiCallback;
-import net.borkiss.weatherforecast.api.ApiError;
-import net.borkiss.weatherforecast.api.WeatherApi;
 import net.borkiss.weatherforecast.api.WeatherStation;
-import net.borkiss.weatherforecast.dto.DTOFactory;
-import net.borkiss.weatherforecast.dto.PlaceDTO;
 import net.borkiss.weatherforecast.model.Place;
 import net.borkiss.weatherforecast.ui.PlacesActivity;
 
@@ -67,6 +61,10 @@ public class PlaceListFragment extends Fragment implements MenuItem.OnMenuItemCl
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getActivity(),
+                LinearLayoutManager.VERTICAL);
+        recyclerView.addItemDecoration(itemDecoration);
 
 
     }

@@ -6,31 +6,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.borkiss.weatherforecast.R;
+import net.borkiss.weatherforecast.adapter.DividerItemDecoration;
 import net.borkiss.weatherforecast.adapter.ForecastAdapter;
-import net.borkiss.weatherforecast.api.ApiCallback;
-import net.borkiss.weatherforecast.api.ApiError;
-import net.borkiss.weatherforecast.api.WeatherApi;
 import net.borkiss.weatherforecast.api.WeatherStation;
-import net.borkiss.weatherforecast.dto.CurrentWeatherDTO;
 import net.borkiss.weatherforecast.model.CurrentWeather;
 import net.borkiss.weatherforecast.model.ForecastFiveDay;
 import net.borkiss.weatherforecast.model.Place;
 import net.borkiss.weatherforecast.util.Utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 public class WeatherFragment extends Fragment {
 
@@ -84,6 +74,9 @@ public class WeatherFragment extends Fragment {
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getActivity(),
+                LinearLayoutManager.HORIZONTAL);
+        recyclerView.addItemDecoration(itemDecoration);
 
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
