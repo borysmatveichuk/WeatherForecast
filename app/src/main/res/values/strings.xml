@@ -6,4 +6,5 @@
     <string name="add">Add</string>
     <string name="about">About</string>
     <string name="format_temperature">%1.0f\u00B0</string>
+    <string name="place_activity_title">Locations</string>
 </resources>

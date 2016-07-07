@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
 import net.borkiss.weatherforecast.R;
 import net.borkiss.weatherforecast.fragment.PlaceListFragment;
@@ -34,6 +35,11 @@ public class PlacesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(getString(R.string.place_activity_title));
+        }
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
 
@@ -61,5 +67,16 @@ public class PlacesActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
