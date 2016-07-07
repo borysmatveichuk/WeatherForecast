@@ -27,6 +27,9 @@ public class CurrentWeatherDTO implements Serializable {
     @SerializedName("clouds")
     private Clouds clouds;
 
+    @SerializedName("sys")
+    private Sys sys;
+
     public Date getTime() {
         return time;
     }
@@ -84,6 +87,14 @@ public class CurrentWeatherDTO implements Serializable {
         return clouds.all;
     }
 
+    public Date getSunrise() {
+        return sys.sunrise;
+    }
+
+    public Date getSunset() {
+        return sys.sunset;
+    }
+
     public static class Weather {
         String main;
         String description;
@@ -104,6 +115,11 @@ public class CurrentWeatherDTO implements Serializable {
 
     public static class Clouds {
         int all;
+    }
+
+    public static class Sys {
+        Date sunrise;
+        Date sunset;
     }
 }
 

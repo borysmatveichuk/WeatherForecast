@@ -17,6 +17,8 @@ public class WeatherDbSchema {
             public static final String WIND_SPEED = "windSpeed";
             public static final String WIND_DEGREE = "windDegree";
             public static final String CLOUDS = "clouds";
+            public static final String SUNRISE = "sunrise";
+            public static final String SUNSET = "sunset";
         }
     }
 

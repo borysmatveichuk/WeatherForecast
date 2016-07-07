@@ -19,6 +19,8 @@ public class CurrentWeather implements Serializable {
     private float windSpeed;
     private float windDegree;
     private int clouds;
+    private Date sunrise;
+    private Date sunset;
 
     public Date getTime() {
         return time;
@@ -114,6 +116,22 @@ public class CurrentWeather implements Serializable {
 
     public void setClouds(int clouds) {
         this.clouds = clouds;
+    }
+
+    public Date getSunrise() {
+        return sunrise;
+    }
+
+    public void setSunrise(Date sunrise) {
+        this.sunrise = sunrise;
+    }
+
+    public Date getSunset() {
+        return sunset;
+    }
+
+    public void setSunset(Date sunset) {
+        this.sunset = sunset;
     }
 
     @Override

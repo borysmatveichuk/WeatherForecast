@@ -43,7 +43,9 @@ public class WeatherBaseHelper extends SQLiteOpenHelper {
                 CurrentWeatherTable.Cols.MAX_TEMPERATURE + " REAL , " +
                 CurrentWeatherTable.Cols.WIND_SPEED + " REAL , " +
                 CurrentWeatherTable.Cols.WIND_DEGREE + " REAL , "+
-                CurrentWeatherTable.Cols.CLOUDS + " INTEGER " +
+                CurrentWeatherTable.Cols.CLOUDS + " INTEGER ," +
+                CurrentWeatherTable.Cols.SUNRISE + " INTEGER , " +
+                CurrentWeatherTable.Cols.SUNSET + " INTEGER " +
                 ")"
         );
 

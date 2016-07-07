@@ -33,6 +33,8 @@ public class CurrentWeatherCursorWrapper extends CursorWrapper {
         float windSpeed = getFloat(getColumnIndex(CurrentWeatherTable.Cols.WIND_SPEED));
         float windDegree = getFloat(getColumnIndex(CurrentWeatherTable.Cols.WIND_DEGREE));
         int clouds = getInt(getColumnIndex(CurrentWeatherTable.Cols.CLOUDS));
+        long sunrise = getLong(getColumnIndex(CurrentWeatherTable.Cols.SUNRISE));
+        long sunset = getLong(getColumnIndex(CurrentWeatherTable.Cols.SUNSET));
 
         CurrentWeather weather = new CurrentWeather();
         weather.setPlaceId(placeId);
@@ -47,6 +49,8 @@ public class CurrentWeatherCursorWrapper extends CursorWrapper {
         weather.setWindSpeed(windSpeed);
         weather.setWindDegree(windDegree);
         weather.setClouds(clouds);
+        weather.setSunrise(new Date(sunrise));
+        weather.setSunset(new Date(sunset));
 
         return weather;
     }
