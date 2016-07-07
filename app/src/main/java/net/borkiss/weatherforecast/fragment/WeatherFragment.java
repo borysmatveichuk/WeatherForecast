@@ -32,6 +32,7 @@ public class WeatherFragment extends Fragment {
     private TextView txtWeatherDescription;
     private TextView txtDate;
     private TextView txtTemperature;
+    private TextView txtTemperatureMinMax;
 
     private RecyclerView recyclerView;
     private ForecastAdapter adapter;
@@ -71,6 +72,7 @@ public class WeatherFragment extends Fragment {
         txtWeatherDescription = (TextView) view.findViewById(R.id.txtWeatherDescription);
         txtDate = (TextView) view.findViewById(R.id.txtDate);
         txtTemperature = (TextView) view.findViewById(R.id.txtTemperature);
+        txtTemperatureMinMax = (TextView) view.findViewById(R.id.txtTemperatureMinMax);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -108,6 +110,11 @@ public class WeatherFragment extends Fragment {
 
         String temperature = Utils.formatTemperature(getActivity(), weather.getTemperature());
         txtTemperature.setText(temperature);
+
+        String temperatureMin = Utils.formatTemperature(getActivity(), weather.getMinTemperature());
+        String temperatureMax = Utils.formatTemperature(getActivity(), weather.getMaxTemperature());
+        txtTemperatureMinMax.setText(String.format(getString(R.string.format_temperatureMinMax), temperatureMin, temperatureMax));
+
 
         if (adapter == null) {
             adapter = new ForecastAdapter(getActivity(), forecastFiveDayList);

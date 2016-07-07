@@ -36,6 +36,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:layout_marginLeft="@dimen/activity_vertical_margin"
+                    android:layout_marginRight="@dimen/activity_vertical_margin"
                     tools:text="01/01/2016" />
 
                 <LinearLayout
@@ -73,6 +75,137 @@
                     </LinearLayout>
 
 
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="33"
+                        android:orientation="vertical"
+                        android:background="@drawable/customborder">
+
+                        <TextView
+                            android:id="@+id/txtTemperatureMinMax"
+                            android:textAppearance="?android:textAppearanceMedium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            tools:text=" 10 | 20 "/>
+
+                        <TextView
+                            android:textAppearance="?android:textAppearanceSmall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_marginBottom="@dimen/activity_vertical_margin"
+                            android:text="@string/title_temperature_min_max"
+                            tools:text="Min | Max"/>
+
+
+                        <TextView
+                            android:id="@+id/txtWind"
+                            android:textAppearance="?android:textAppearanceLarge"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            tools:text=" 30 m/s"/>
+
+                        <TextView
+                            android:textAppearance="?android:textAppearanceSmall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_marginBottom="@dimen/activity_vertical_margin"
+                            tools:text="Wind, NO"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="33"
+                        android:orientation="vertical"
+                        android:background="@drawable/customborder">
+
+                        <TextView
+                            android:id="@+id/txtHumidity"
+                            android:textAppearance="?android:textAppearanceLarge"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            tools:text=" 10% "/>
+
+                        <TextView
+                            android:textAppearance="?android:textAppearanceSmall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_marginBottom="@dimen/activity_vertical_margin"
+                            tools:text="Hymidity"/>
+
+                        <TextView
+                            android:id="@+id/txtClouds"
+                            android:textAppearance="?android:textAppearanceLarge"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            tools:text=" 30% "/>
+
+                        <TextView
+                            android:textAppearance="?android:textAppearanceSmall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_marginBottom="@dimen/activity_vertical_margin"
+                            tools:text="Clouds"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="34"
+                        android:orientation="vertical"
+                        android:background="@drawable/customborder">
+
+                        <TextView
+                            android:id="@+id/txtPressure"
+                            android:textAppearance="?android:textAppearanceLarge"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            tools:text=" 1000 hPa"/>
+
+                        <TextView
+                            android:textAppearance="?android:textAppearanceSmall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_marginBottom="@dimen/activity_vertical_margin"
+                            tools:text="Pressure"/>
+
+                        <TextView
+                            android:id="@+id/txtSunrise"
+                            android:textAppearance="?android:textAppearanceMedium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            tools:text="06:30 | 21:20"/>
+
+                        <TextView
+                            android:textAppearance="?android:textAppearanceSmall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_marginBottom="@dimen/activity_vertical_margin"
+                            tools:text="Sunrise | Sunset"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

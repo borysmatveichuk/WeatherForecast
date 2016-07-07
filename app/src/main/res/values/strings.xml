@@ -6,5 +6,11 @@
     <string name="add">Add</string>
     <string name="about">About</string>
     <string name="format_temperature">%1.0f\u00B0</string>
+    <string name="format_temperatureMinMax">%1$s | %2$s</string>
+    <string name="format_wind_kmh">Wind: %1$1.0f km/h %2$s</string>
+    <string name="format_pressure">Pressure: %1.0f hPa</string>
+    <string name="format_humidity">Humidity: %1.0f %%</string>
     <string name="place_activity_title">Locations</string>
+
+    <string name="title_temperature_min_max">Min | Max</string>
 </resources>
