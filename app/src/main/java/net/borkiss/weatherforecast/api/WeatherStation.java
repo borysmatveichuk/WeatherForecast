@@ -88,6 +88,8 @@ public class WeatherStation {
         values.put(CurrentWeatherTable.Cols.WIND_SPEED, weather.getWindSpeed());
         values.put(CurrentWeatherTable.Cols.WIND_DEGREE, weather.getWindDegree());
         values.put(CurrentWeatherTable.Cols.CLOUDS, weather.getClouds());
+        values.put(CurrentWeatherTable.Cols.SUNRISE, weather.getSunrise().getTime());
+        values.put(CurrentWeatherTable.Cols.SUNSET, weather.getSunset().getTime());
 
         return values;
     }
