@@ -91,10 +91,14 @@ public class DatabaseTest {
         CurrentWeather dto = new CurrentWeather();
         dto.setTime(new Date(1467651600));
         dto.setPlaceId(111);
+        dto.setSunset(new Date(1467651600));
+        dto.setSunrise(new Date(1467651600));
 
         CurrentWeather dto2 = new CurrentWeather();
         dto2.setTime(new Date(1467651600));
         dto2.setPlaceId(222);
+        dto2.setSunset(new Date(1467651600));
+        dto2.setSunrise(new Date(1467651600));
 
 
         sqLiteDatabase.addCurrentWeather(dto);
@@ -106,10 +110,16 @@ public class DatabaseTest {
 
         assertThat(listAdded.get(1).getTime(), is(new Date(1467651600)));
         assertThat(listAdded.get(1).getPlaceId(), is(222));
+        assertThat(listAdded.get(1).getSunset(), is(new Date(1467651600)));
+        assertThat(listAdded.get(1).getSunrise(), is(new Date(1467651600)));
+
 
         CurrentWeather dto3 = new CurrentWeather();
         dto3.setTime(new Date(1467651600));
         dto3.setPlaceId(111);
+        dto3.setSunset(new Date(1467651600));
+        dto3.setSunrise(new Date(1467651600));
+
         //must bu updated
         assertThat(sqLiteDatabase.addCurrentWeather(dto3), is(1));
         assertThat(listAdded.size(), is(2));
@@ -126,7 +136,6 @@ public class DatabaseTest {
         ForecastFiveDay dto2 = new ForecastFiveDay();
         dto2.setTime(new Date(1467651600));
         dto2.setPlaceId(222);
-
 
         sqLiteDatabase.addForecastFiveDay(dto);
         sqLiteDatabase.addForecastFiveDay(dto2);
