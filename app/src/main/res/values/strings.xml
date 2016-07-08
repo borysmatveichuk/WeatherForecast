@@ -6,11 +6,18 @@
     <string name="add">Add</string>
     <string name="about">About</string>
     <string name="format_temperature">%1.0f\u00B0</string>
-    <string name="format_temperatureMinMax">%1$s | %2$s</string>
-    <string name="format_wind_kmh">Wind: %1$1.0f km/h %2$s</string>
-    <string name="format_pressure">Pressure: %1.0f hPa</string>
-    <string name="format_humidity">Humidity: %1.0f %%</string>
+    <string name="format_temperature_min_max">%1$s | %2$s</string>
+    <string name="format_wind">%1$1.0f m/s %2$s</string>
+    <string name="format_pressure">%1.0f hPa</string>
+    <string name="format_humidity">%d %%</string>
+    <string name="format_clouds">%d %%</string>
+    <string name="format_sunrise_sunset">%1$s | %2$s</string>
     <string name="place_activity_title">Locations</string>
 
     <string name="title_temperature_min_max">Min | Max</string>
+    <string name="title_wind">Wind</string>
+    <string name="title_humidity">Humidity</string>
+    <string name="title_clouds">Clouds</string>
+    <string name="title_pressure">Pressure</string>
+    <string name="title_sunrise_sunset">Sunrise | Sunset</string>
 </resources>

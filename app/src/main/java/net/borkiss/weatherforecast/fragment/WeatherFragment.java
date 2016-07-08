@@ -33,6 +33,11 @@ public class WeatherFragment extends Fragment {
     private TextView txtDate;
     private TextView txtTemperature;
     private TextView txtTemperatureMinMax;
+    private TextView txtWind;
+    private TextView txtHumidity;
+    private TextView txtClouds;
+    private TextView txtPressure;
+    private TextView txtSunriseSunset;
 
     private RecyclerView recyclerView;
     private ForecastAdapter adapter;
@@ -73,6 +78,11 @@ public class WeatherFragment extends Fragment {
         txtDate = (TextView) view.findViewById(R.id.txtDate);
         txtTemperature = (TextView) view.findViewById(R.id.txtTemperature);
         txtTemperatureMinMax = (TextView) view.findViewById(R.id.txtTemperatureMinMax);
+        txtWind = (TextView) view.findViewById(R.id.txtWind);
+        txtHumidity = (TextView) view.findViewById(R.id.txtHumidity);
+        txtClouds = (TextView) view.findViewById(R.id.txtClouds);
+        txtPressure = (TextView) view.findViewById(R.id.txtPressure);
+        txtSunriseSunset = (TextView) view.findViewById(R.id.txtSunriseSunset);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -113,8 +123,25 @@ public class WeatherFragment extends Fragment {
 
         String temperatureMin = Utils.formatTemperature(getActivity(), weather.getMinTemperature());
         String temperatureMax = Utils.formatTemperature(getActivity(), weather.getMaxTemperature());
-        txtTemperatureMinMax.setText(String.format(getString(R.string.format_temperatureMinMax), temperatureMin, temperatureMax));
 
+        txtTemperatureMinMax.setText(String.format(getString(R.string.format_temperature_min_max),
+                temperatureMin, temperatureMax));
+
+        txtWind.setText(Utils.getFormattedWind(getActivity(),
+                weather.getWindSpeed(), weather.getWindDegree()));
+
+        txtHumidity.setText(String.format(getString(R.string.format_humidity),
+                weather.getHumidity()));
+        txtClouds.setText(String.format(getString(R.string.format_clouds),
+                weather.getClouds()));
+
+        txtPressure.setText(String.format(getString(R.string.format_pressure),
+                weather.getPressure()));
+
+        String sunrise = Utils.formatTime(weather.getSunrise());
+        String sunset = Utils.formatTime(weather.getSunset());
+        txtSunriseSunset.setText(String.format(getString(R.string.format_sunrise_sunset),
+                sunrise, sunset));
 
         if (adapter == null) {
             adapter = new ForecastAdapter(getActivity(), forecastFiveDayList);

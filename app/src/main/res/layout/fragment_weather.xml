@@ -81,7 +81,7 @@
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp">
+                    android:layout_height="wrap_content">
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -90,8 +90,8 @@
                         android:background="@drawable/customborder">
 
                         <TextView
+                            style="@style/NormalText.Bold"
                             android:id="@+id/txtTemperatureMinMax"
-                            android:textAppearance="?android:textAppearanceMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -108,12 +108,12 @@
 
 
                         <TextView
+                            style="@style/NormalText.Bold"
                             android:id="@+id/txtWind"
-                            android:textAppearance="?android:textAppearanceLarge"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            tools:text=" 30 m/s"/>
+                            tools:text=" 30 m/s, NO"/>
 
                         <TextView
                             android:textAppearance="?android:textAppearanceSmall"
@@ -121,7 +121,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:layout_marginBottom="@dimen/activity_vertical_margin"
-                            tools:text="Wind, NO"/>
+                            android:text="@string/title_wind" />
 
                     </LinearLayout>
 
@@ -133,8 +133,8 @@
                         android:background="@drawable/customborder">
 
                         <TextView
+                            style="@style/NormalText.Bold"
                             android:id="@+id/txtHumidity"
-                            android:textAppearance="?android:textAppearanceLarge"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -146,11 +146,11 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:layout_marginBottom="@dimen/activity_vertical_margin"
-                            tools:text="Hymidity"/>
+                            android:text="@string/title_humidity"/>
 
                         <TextView
+                            style="@style/NormalText.Bold"
                             android:id="@+id/txtClouds"
-                            android:textAppearance="?android:textAppearanceLarge"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -162,7 +162,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:layout_marginBottom="@dimen/activity_vertical_margin"
-                            tools:text="Clouds"/>
+                            android:text="@string/title_clouds"/>
 
                     </LinearLayout>
 
@@ -174,8 +174,8 @@
                         android:background="@drawable/customborder">
 
                         <TextView
+                            style="@style/NormalText.Bold"
                             android:id="@+id/txtPressure"
-                            android:textAppearance="?android:textAppearanceLarge"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -187,11 +187,11 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:layout_marginBottom="@dimen/activity_vertical_margin"
-                            tools:text="Pressure"/>
+                            android:text="@string/title_pressure"/>
 
                         <TextView
-                            android:id="@+id/txtSunrise"
-                            android:textAppearance="?android:textAppearanceMedium"
+                            style="@style/NormalText.Bold"
+                            android:id="@+id/txtSunriseSunset"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -203,7 +203,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:layout_marginBottom="@dimen/activity_vertical_margin"
-                            tools:text="Sunrise | Sunset"/>
+                            android:text="@string/title_sunrise_sunset"/>
 
                     </LinearLayout>
 
