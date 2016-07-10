@@ -22,13 +22,16 @@ public class WeatherApplication extends Application {
 //        Intent intent = WeatherService.newIntent(getActivity());
 //        getActivity().startService(intent);
 
-        if (!WeatherService.isServiceAlarmOn(instance)) {
-            WeatherService.setServiceAlarm(instance, true);
-        }
+
+        startService();
     }
 
     public static WeatherApplication getInstance() {
         return instance;
+    }
+
+    public void startService() {
+        instance.getApplicationContext().startService(new Intent(getApplicationContext(), WeatherService.class));
     }
 
 }

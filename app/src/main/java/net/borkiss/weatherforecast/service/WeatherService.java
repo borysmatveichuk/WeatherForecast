@@ -2,15 +2,22 @@ package net.borkiss.weatherforecast.service;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
+import android.os.IBinder;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import net.borkiss.weatherforecast.R;
 import net.borkiss.weatherforecast.adapter.PlaceAdapter;
 import net.borkiss.weatherforecast.api.ApiCallback;
 import net.borkiss.weatherforecast.api.ApiError;
@@ -23,14 +30,17 @@ import net.borkiss.weatherforecast.dto.ForecastFiveDayDTO;
 import net.borkiss.weatherforecast.model.CurrentWeather;
 import net.borkiss.weatherforecast.model.ForecastFiveDay;
 import net.borkiss.weatherforecast.model.Place;
+import net.borkiss.weatherforecast.ui.MainActivity;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-public class WeatherService extends IntentService {
+public class WeatherService extends Service {
 
     private static final String TAG = WeatherService.class.getSimpleName();
 
-    private static final int INTERVAL = 1000 * 60 * 2; // 15 MINUTES
+    private static final int ID_NOTIF = 1;
+    private static final int INTERVAL = 1000 * 60 * 15; // 15 MINUTES
 
     private ApiCallback<CurrentWeatherDTO> currentWeatherCallback = new ApiCallback<CurrentWeatherDTO>() {
         @Override
@@ -44,7 +54,7 @@ public class WeatherService extends IntentService {
                 Log.d(TAG, "Added current weather " + count + " record(s) to DB.");
             } else {
                 Log.e(TAG, "Can't add current weather to DB!");
-        }
+            }
         }
 
         @Override
@@ -91,46 +101,61 @@ public class WeatherService extends IntentService {
         }
     };
 
+    private final LogScheduledThreadPoolExecutor execService = new LogScheduledThreadPoolExecutor(1);
     private WeatherStation instance;
+    private NotificationManager nm;
 
-    public static Intent newIntent(Context context) {
-        return new Intent(context, WeatherService.class);
-    }
-
-    public WeatherService() {
-        this(TAG);
-    }
-
-    public WeatherService(String name) {
-        super(name);
-    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = WeatherStation.getInstance(this);
+        nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        execService.scheduleWithFixedDelay(task, 0, INTERVAL, TimeUnit.MILLISECONDS);
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+    public void onDestroy() {
+        execService.shutdownNow();
+        super.onDestroy();
+    }
 
-        if(!isNetworkAvailableAndConnected())
-            return;
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
+    }
 
-        Log.i(TAG, "Received an intent: " + intent);
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
 
-        WeatherApi api = new WeatherApi();
+    private Runnable task = new Runnable() {
 
-        List<Place> places = instance.getPlaces();
-        for (Place place : places) {
-            Log.i(TAG, "Get weather for: " + place.getName());
+        @Override
+        public void run() {
 
-            api.getCurrentWeather(place.getCityId(), currentWeatherCallback);
-            api.getFiveDayForecastByPlaceId(place.getCityId(), fiveDayDTOCallback);
 
+            if (!isNetworkAvailableAndConnected())
+                return;
+
+
+            WeatherApi api = new WeatherApi();
+
+            List<Place> places = instance.getPlaces();
+            for (Place place : places) {
+                Log.i(TAG, "Get weather for: " + place.getName());
+
+                api.getCurrentWeather(place.getCityId(), currentWeatherCallback);
+                api.getFiveDayForecastByPlaceId(place.getCityId(), fiveDayDTOCallback);
+
+            }
+
+            sendNotification();
         }
 
-    }
+    };
 
     private boolean isNetworkAvailableAndConnected() {
         ConnectivityManager cm =
@@ -142,26 +167,26 @@ public class WeatherService extends IntentService {
                 cm.getActiveNetworkInfo().isConnected();
     }
 
-    public static boolean isServiceAlarmOn(Context context) {
-        Intent intent = WeatherService.newIntent(context);
-        PendingIntent pi = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_NO_CREATE);
+    private void sendNotification() {
 
-        return pi != null;
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        int notifDefaultsSettings = Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS;
+
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+        Notification notif = new Notification.Builder(getApplicationContext())
+                .setContentTitle(getApplicationContext().getResources().getString(R.string.app_name))
+                        .setContentText("Get forecast")
+                        .setContentIntent(pIntent)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.mipmap.ic_launcher))
+                        .setAutoCancel(true)
+                        .setWhen(System.currentTimeMillis())
+                        //.setDefaults(notifDefaultsSettings)
+                        .getNotification();
+
+        nm.notify(ID_NOTIF, notif);
     }
-
-    public static void setServiceAlarm(Context context, boolean isOn) {
-        Intent intent = WeatherService.newIntent(context);
-        PendingIntent pi = PendingIntent.getService(context, 0, intent, 0);
-        AlarmManager alarmManager = (AlarmManager)
-                context.getSystemService(Context.ALARM_SERVICE);
-        if (isOn) {
-            //alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
-            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME,
-                    SystemClock.elapsedRealtime(), INTERVAL, pi);
-        } else {
-            alarmManager.cancel(pi);
-            pi.cancel();
-        }
-    }
-
 }
