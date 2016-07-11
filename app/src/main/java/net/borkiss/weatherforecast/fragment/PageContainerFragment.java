@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,10 +22,15 @@ import net.borkiss.weatherforecast.api.WeatherStation;
 import net.borkiss.weatherforecast.model.Place;
 import net.borkiss.weatherforecast.service.WeatherService;
 import net.borkiss.weatherforecast.ui.PlacesActivity;
+import net.borkiss.weatherforecast.util.Prefs;
 
+import java.util.Date;
 import java.util.List;
 
 public class PageContainerFragment extends Fragment {
+
+    private static final int REQUEST_PLACES = 1;
+    private static final String TAG = PageContainerFragment.class.getSimpleName();
 
     private List<Place> places;
     private ViewPager viewPager;
@@ -42,6 +48,11 @@ public class PageContainerFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!WeatherService.isServiceAlarmOn(getActivity())) {
+            WeatherService.setServiceAlarm(getActivity(), true);
+        }
+
         setHasOptionsMenu(true);
     }
 
@@ -85,6 +96,14 @@ public class PageContainerFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        Log.d(TAG, "onResume");
+        Log.d(TAG, "Service is ON = " + WeatherService.isServiceAlarmOn(getActivity()));
+
+        if (needUpdateImmediately()) {
+            Intent intent = WeatherService.newIntent(getActivity());
+            getActivity().startService(intent);
+        }
+
         updateUI();
     }
 
@@ -99,11 +118,25 @@ public class PageContainerFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.menu_item_places:
                 Intent intent = PlacesActivity.newIntent(getActivity(), PlacesActivity.TYPE.EDIT);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_PLACES);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_PLACES) {
+            Intent intent = WeatherService.newIntent(getActivity());
+            getActivity().startService(intent);
+
+            Log.d(TAG, "onActivityResult");
+        }
+    }
+
+    private boolean needUpdateImmediately() {
+        return (new Date().getTime() - Prefs.getLastUpdateTime(getActivity())
+                >= WeatherService.INTERVAL);
     }
 }

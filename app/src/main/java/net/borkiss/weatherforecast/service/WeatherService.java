@@ -1,18 +1,17 @@
 package net.borkiss.weatherforecast.service;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
-import android.os.IBinder;
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -31,16 +30,17 @@ import net.borkiss.weatherforecast.model.CurrentWeather;
 import net.borkiss.weatherforecast.model.ForecastFiveDay;
 import net.borkiss.weatherforecast.model.Place;
 import net.borkiss.weatherforecast.ui.MainActivity;
+import net.borkiss.weatherforecast.util.Prefs;
 
+import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-public class WeatherService extends Service {
+public class WeatherService extends IntentService {
 
     private static final String TAG = WeatherService.class.getSimpleName();
 
+    public static final int INTERVAL = 1000 * 60 * 10; // 15 MINUTES
     private static final int ID_NOTIF = 1;
-    private static final int INTERVAL = 1000 * 60 * 15; // 15 MINUTES
 
     private ApiCallback<CurrentWeatherDTO> currentWeatherCallback = new ApiCallback<CurrentWeatherDTO>() {
         @Override
@@ -54,7 +54,7 @@ public class WeatherService extends Service {
                 Log.d(TAG, "Added current weather " + count + " record(s) to DB.");
             } else {
                 Log.e(TAG, "Can't add current weather to DB!");
-            }
+        }
         }
 
         @Override
@@ -101,61 +101,52 @@ public class WeatherService extends Service {
         }
     };
 
-    private final LogScheduledThreadPoolExecutor execService = new LogScheduledThreadPoolExecutor(1);
     private WeatherStation instance;
     private NotificationManager nm;
 
+    public static Intent newIntent(Context context) {
+        return new Intent(context, WeatherService.class);
+    }
+
+    public WeatherService() {
+        this(TAG);
+    }
+
+    public WeatherService(String name) {
+        super(name);
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        setIntentRedelivery(true);
         instance = WeatherStation.getInstance(this);
         nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        execService.scheduleWithFixedDelay(task, 0, INTERVAL, TimeUnit.MILLISECONDS);
     }
 
     @Override
-    public void onDestroy() {
-        execService.shutdownNow();
-        super.onDestroy();
-    }
+    protected void onHandleIntent(Intent intent) {
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return START_STICKY;
-    }
+        if(!isNetworkAvailableAndConnected())
+            return;
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
+        Log.i(TAG, "Received an intent: " + intent);
 
-    private Runnable task = new Runnable() {
+        WeatherApi api = new WeatherApi();
 
-        @Override
-        public void run() {
+        List<Place> places = instance.getPlaces();
+        for (Place place : places) {
+            Log.i(TAG, "Get weather for: " + place.getName());
 
+            api.getCurrentWeather(place.getCityId(), currentWeatherCallback);
+            api.getFiveDayForecastByPlaceId(place.getCityId(), fiveDayDTOCallback);
 
-            if (!isNetworkAvailableAndConnected())
-                return;
-
-
-            WeatherApi api = new WeatherApi();
-
-            List<Place> places = instance.getPlaces();
-            for (Place place : places) {
-                Log.i(TAG, "Get weather for: " + place.getName());
-
-                api.getCurrentWeather(place.getCityId(), currentWeatherCallback);
-                api.getFiveDayForecastByPlaceId(place.getCityId(), fiveDayDTOCallback);
-
-            }
-
-            sendNotification();
         }
 
-    };
+        Prefs.setLastUpdateTime(this, new Date().getTime());
+
+        sendNotification();
+    }
 
     private boolean isNetworkAvailableAndConnected() {
         ConnectivityManager cm =
@@ -165,6 +156,28 @@ public class WeatherService extends Service {
 
         return isNetworkAvailable &&
                 cm.getActiveNetworkInfo().isConnected();
+    }
+
+    public static boolean isServiceAlarmOn(Context context) {
+        Intent intent = WeatherService.newIntent(context);
+        PendingIntent pi = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_NO_CREATE);
+
+        return pi != null;
+    }
+
+    public static void setServiceAlarm(Context context, boolean isOn) {
+        Intent intent = WeatherService.newIntent(context);
+        PendingIntent pi = PendingIntent.getService(context, 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager)
+                context.getSystemService(Context.ALARM_SERVICE);
+        if (isOn) {
+            //alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
+            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME,
+                    SystemClock.elapsedRealtime(), INTERVAL, pi);
+        } else {
+            alarmManager.cancel(pi);
+            pi.cancel();
+        }
     }
 
     private void sendNotification() {
@@ -178,14 +191,14 @@ public class WeatherService extends Service {
 
         Notification notif = new Notification.Builder(getApplicationContext())
                 .setContentTitle(getApplicationContext().getResources().getString(R.string.app_name))
-                        .setContentText("Get forecast")
-                        .setContentIntent(pIntent)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.mipmap.ic_launcher))
-                        .setAutoCancel(true)
-                        .setWhen(System.currentTimeMillis())
-                        //.setDefaults(notifDefaultsSettings)
-                        .getNotification();
+                .setContentText("Get forecast")
+                .setContentIntent(pIntent)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.mipmap.ic_launcher))
+                .setAutoCancel(true)
+                .setWhen(System.currentTimeMillis())
+                .setDefaults(notifDefaultsSettings)
+                .getNotification();
 
         nm.notify(ID_NOTIF, notif);
     }
