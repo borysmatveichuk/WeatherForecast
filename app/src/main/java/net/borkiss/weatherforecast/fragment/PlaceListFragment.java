@@ -65,8 +65,6 @@ public class PlaceListFragment extends Fragment implements MenuItem.OnMenuItemCl
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getActivity(),
                 LinearLayoutManager.VERTICAL);
         recyclerView.addItemDecoration(itemDecoration);
-
-
     }
 
     @Override
@@ -76,7 +74,9 @@ public class PlaceListFragment extends Fragment implements MenuItem.OnMenuItemCl
     }
 
     private void updateUI() {
+
         places = WeatherStation.getInstance(getActivity()).getPlaces();
+
         if (adapter == null) {
             adapter = new PlaceAdapter(getActivity(), places);
             recyclerView.setAdapter(adapter);

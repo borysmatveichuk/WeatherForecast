@@ -18,20 +18,10 @@ public class WeatherApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance=this;
-
-//        Intent intent = WeatherService.newIntent(getActivity());
-//        getActivity().startService(intent);
-
-
-        startService();
     }
 
     public static WeatherApplication getInstance() {
         return instance;
-    }
-
-    public void startService() {
-        instance.getApplicationContext().startService(new Intent(getApplicationContext(), WeatherService.class));
     }
 
 }
