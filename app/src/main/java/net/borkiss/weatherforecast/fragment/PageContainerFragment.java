@@ -1,11 +1,13 @@
 package net.borkiss.weatherforecast.fragment;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.os.ResultReceiver;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,10 +16,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import net.borkiss.weatherforecast.R;
-import net.borkiss.weatherforecast.api.WeatherApi;
 import net.borkiss.weatherforecast.api.WeatherStation;
 import net.borkiss.weatherforecast.model.Place;
 import net.borkiss.weatherforecast.service.WeatherService;
@@ -31,10 +31,12 @@ public class PageContainerFragment extends Fragment {
 
     private static final int REQUEST_PLACES = 1;
     private static final String TAG = PageContainerFragment.class.getSimpleName();
+    private static final String SAVE_RESULT_RECEIVER = "saveResultReceiver";
 
     private List<Place> places;
     private ViewPager viewPager;
     private FragmentStatePagerAdapter adapter;
+    private ResultReceiver resultReceiver;
 
     public static PageContainerFragment newInstance() {
 
@@ -51,6 +53,15 @@ public class PageContainerFragment extends Fragment {
 
         if (!WeatherService.isServiceAlarmOn(getActivity())) {
             WeatherService.setServiceAlarm(getActivity(), true);
+        }
+
+        if ((savedInstanceState != null)
+                && (savedInstanceState.getParcelable(SAVE_RESULT_RECEIVER) != null)) {
+            resultReceiver = savedInstanceState.getParcelable(SAVE_RESULT_RECEIVER);
+            Log.d(TAG, "Restored receiver" + resultReceiver);
+        } else {
+            resultReceiver = new ServiceResultReceiver(new Handler());
+            Log.d(TAG, "Created new receiver" + resultReceiver);
         }
 
         setHasOptionsMenu(true);
@@ -73,7 +84,7 @@ public class PageContainerFragment extends Fragment {
 
         places = WeatherStation.getInstance(getActivity()).getPlaces();
 
-        if (adapter == null) {
+        //if (adapter == null) {
             adapter = new FragmentStatePagerAdapter(getChildFragmentManager()) {
                 @Override
                 public Fragment getItem(int position) {
@@ -86,9 +97,9 @@ public class PageContainerFragment extends Fragment {
                 }
             };
             viewPager.setAdapter(adapter);
-        } else {
-            adapter.notifyDataSetChanged();
-        }
+        //} else {
+        //    adapter.notifyDataSetChanged();
+        //}
 
     }
 
@@ -100,11 +111,11 @@ public class PageContainerFragment extends Fragment {
         Log.d(TAG, "Service is ON = " + WeatherService.isServiceAlarmOn(getActivity()));
 
         if (needUpdateImmediately()) {
-            Intent intent = WeatherService.newIntent(getActivity());
+            Intent intent = WeatherService.newIntent(getActivity(), resultReceiver);
             getActivity().startService(intent);
+        } else {
+            updateUI();
         }
-
-        updateUI();
     }
 
     @Override
@@ -135,8 +146,36 @@ public class PageContainerFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(SAVE_RESULT_RECEIVER, resultReceiver);
+    }
+
     private boolean needUpdateImmediately() {
         return (new Date().getTime() - Prefs.getLastUpdateTime(getActivity())
                 >= WeatherService.INTERVAL);
+    }
+
+    @SuppressLint("ParcelCreator")
+    private class ServiceResultReceiver extends ResultReceiver {
+
+        /**
+         * Create a new ResultReceive to receive results.  Your
+         * {@link #onReceiveResult} method will be called from the thread running
+         * <var>handler</var> if given, or from an arbitrary thread if null.
+         *
+         * @param handler
+         */
+        public ServiceResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            super.onReceiveResult(resultCode, resultData);
+            Log.d(TAG, "Received result from service: " + resultCode);
+            updateUI();
+        }
     }
 }

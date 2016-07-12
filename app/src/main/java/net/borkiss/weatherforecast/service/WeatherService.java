@@ -1,6 +1,5 @@
 package net.borkiss.weatherforecast.service;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
@@ -8,19 +7,16 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
+import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v4.os.ResultReceiver;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import net.borkiss.weatherforecast.R;
-import net.borkiss.weatherforecast.adapter.PlaceAdapter;
 import net.borkiss.weatherforecast.api.ApiCallback;
 import net.borkiss.weatherforecast.api.ApiError;
-import net.borkiss.weatherforecast.api.URIBuildHelper;
 import net.borkiss.weatherforecast.api.WeatherApi;
 import net.borkiss.weatherforecast.api.WeatherStation;
 import net.borkiss.weatherforecast.dto.CurrentWeatherDTO;
@@ -40,7 +36,11 @@ public class WeatherService extends IntentService {
     private static final String TAG = WeatherService.class.getSimpleName();
 
     public static final int INTERVAL = 1000 * 60 * 10; // 15 MINUTES
+    public static final int STATUS_FINISHED = 1;
+
     private static final int ID_NOTIF = 1;
+    private static final String EXTRA_RESULT_RECEIVER = "extraResultReceiver";
+
 
     private ApiCallback<CurrentWeatherDTO> currentWeatherCallback = new ApiCallback<CurrentWeatherDTO>() {
         @Override
@@ -52,9 +52,10 @@ public class WeatherService extends IntentService {
             int count = instance.addCurrentWeather(currentWeather);
             if (count > 0) {
                 Log.d(TAG, "Added current weather " + count + " record(s) to DB.");
+                Prefs.setLastUpdateTime(WeatherService.this, new Date().getTime());
             } else {
                 Log.e(TAG, "Can't add current weather to DB!");
-        }
+            }
         }
 
         @Override
@@ -104,8 +105,15 @@ public class WeatherService extends IntentService {
     private WeatherStation instance;
     private NotificationManager nm;
 
+    public static Intent newIntent(Context context, ResultReceiver resultReceiver) {
+        Intent intent = new Intent(context, WeatherService.class);
+        intent.putExtra(EXTRA_RESULT_RECEIVER, resultReceiver);
+        return intent;
+    }
+
     public static Intent newIntent(Context context) {
-        return new Intent(context, WeatherService.class);
+        Intent intent = new Intent(context, WeatherService.class);
+        return intent;
     }
 
     public WeatherService() {
@@ -131,6 +139,7 @@ public class WeatherService extends IntentService {
             return;
 
         Log.i(TAG, "Received an intent: " + intent);
+        final ResultReceiver receiver = intent.getParcelableExtra(EXTRA_RESULT_RECEIVER);
 
         WeatherApi api = new WeatherApi();
 
@@ -143,7 +152,8 @@ public class WeatherService extends IntentService {
 
         }
 
-        Prefs.setLastUpdateTime(this, new Date().getTime());
+        if (receiver != null)
+            receiver.send(STATUS_FINISHED, Bundle.EMPTY);
 
         sendNotification();
     }
