@@ -6,10 +6,4 @@
         android:icon="@mipmap/ic_add_white_24dp"
         android:title="@string/add"
         app:showAsAction="ifRoom|collapseActionView" />
-
-    <item
-        android:id="@+id/menu_item_edit"
-        android:icon="@mipmap/ic_edit_white_24dp"
-        android:title="@string/edit"
-        app:showAsAction="ifRoom|collapseActionView" />
 </menu>
