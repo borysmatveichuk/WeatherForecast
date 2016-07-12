@@ -59,13 +59,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-                        <TextView
-                            android:id="@+id/txtWeather"
-                            android:textAppearance="?android:textAppearanceLarge"
+
+                        <ImageView
+                            android:id="@+id/imgWeatherIcon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            tools:text="Weather" />
-
+                            android:layout_gravity="center_horizontal"
+                            tools:src="@mipmap/ic_weather_cloudy"/>
                         <TextView
                             android:id="@+id/txtWeatherDescription"
                             android:textAppearance="?android:textAppearanceLarge"

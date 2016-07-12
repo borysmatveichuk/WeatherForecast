@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.borkiss.weatherforecast.R;
@@ -56,20 +57,21 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
     public class ForecastHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView txtTime;
-        private TextView txtWeather;
+        private ImageView imgWeatherIcon;
         private TextView txtTemperature;
 
         public ForecastHolder(View itemView) {
             super(itemView);
 
             txtTime = (TextView) itemView.findViewById(R.id.txtTime);
-            txtWeather = (TextView) itemView.findViewById(R.id.txtWeather);
+            imgWeatherIcon = (ImageView) itemView.findViewById(R.id.imgWeatherIcon);
             txtTemperature = (TextView) itemView.findViewById(R.id.txtTemperature);
         }
 
         public void bind(ForecastFiveDay forecast) {
             txtTime.setText(Utils.formatTime(forecast.getTime()));
-            txtWeather.setText(forecast.getWeatherMain());
+            imgWeatherIcon.setImageResource(Utils.getIconResourceForWeatherCondition(
+                    forecast.getWeatherConditionId()));
             txtTemperature.setText(Utils.formatTemperature(context, forecast.getTemperature()));
         }
 

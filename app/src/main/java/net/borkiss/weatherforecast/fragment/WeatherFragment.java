@@ -6,9 +6,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.borkiss.weatherforecast.R;
@@ -20,15 +22,18 @@ import net.borkiss.weatherforecast.model.ForecastFiveDay;
 import net.borkiss.weatherforecast.model.Place;
 import net.borkiss.weatherforecast.util.Utils;
 
+import java.util.Date;
 import java.util.List;
 
 public class WeatherFragment extends Fragment {
 
+    private static final String TAG = WeatherFragment.class.getSimpleName();
     private static final String ARG_PLACE_ID = "placeId";
 
     private Place place;
     private TextView placeName;
-    private TextView txtWeather;
+    private ImageView imgWeatherIcon;
+    //private TextView txtWeather;
     private TextView txtWeatherDescription;
     private TextView txtDate;
     private TextView txtTemperature;
@@ -73,8 +78,9 @@ public class WeatherFragment extends Fragment {
         placeName = (TextView) view.findViewById(R.id.txtPlace);
         placeName.setText(place.getName());
 
-        txtWeather = (TextView) view.findViewById(R.id.txtWeather);
+        //txtWeather = (TextView) view.findViewById(R.id.txtWeather);
         txtWeatherDescription = (TextView) view.findViewById(R.id.txtWeatherDescription);
+        imgWeatherIcon = (ImageView) view.findViewById(R.id.imgWeatherIcon);
         txtDate = (TextView) view.findViewById(R.id.txtDate);
         txtTemperature = (TextView) view.findViewById(R.id.txtTemperature);
         txtTemperatureMinMax = (TextView) view.findViewById(R.id.txtTemperatureMinMax);
@@ -107,6 +113,12 @@ public class WeatherFragment extends Fragment {
         updateUI();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "on Start " + place.getName());
+    }
+
     private void updateUI() {
         CurrentWeather weather = WeatherStation.getInstance(getActivity())
                 .getCurrentWeatherByCityId(place.getCityId());
@@ -114,9 +126,13 @@ public class WeatherFragment extends Fragment {
         List<ForecastFiveDay> forecastFiveDayList = WeatherStation.getInstance(getActivity())
                 .getListForecastFiveDayByCityId(place.getCityId());
 
-        txtWeather.setText(weather.getWeatherMain());
+        placeName.setText(place.getName() + " "+ new Date().toString());
+        //txtWeather.setText(weather.getWeatherMain());
         txtWeatherDescription.setText(weather.getWeatherDescription());
         txtDate.setText(Utils.formatDate(weather.getTime()));
+
+        imgWeatherIcon.setImageResource(Utils.getIconResourceForWeatherCondition(
+                weather.getWeatherConditionId()));
 
         String temperature = Utils.formatTemperature(getActivity(), weather.getTemperature());
         txtTemperature.setText(temperature);

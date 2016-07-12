@@ -73,6 +73,37 @@ public class Utils {
         return String.format(context.getString(R.string.format_wind), windSpeed, direction);
     }
 
+    // Based on weather code data found at:
+    // http://openweathermap.org/weather-conditions
+    public static int getIconResourceForWeatherCondition(int weatherId) {
+
+        if (weatherId >= 200 && weatherId <= 232) { //Group 2xx: Thunderstorm
+//            return R.drawable.ic_storm;
+//        } else if (weatherId >= 300 && weatherId <= 321) { //Group 3xx: Drizzle
+//            return R.drawable.ic_light_rain;
+//        } else if (weatherId >= 500 && weatherId <= 504) {  // Rain
+//            return R.drawable.ic_rain;
+//        } else if (weatherId == 511) { //	freezing rain
+//            return R.drawable.ic_snow;
+//        } else if (weatherId >= 520 && weatherId <= 531) {  //shower rain
+//            return R.drawable.ic_rain;
+//        } else if (weatherId >= 600 && weatherId <= 622) {  // Group 6xx: Snow
+//            return R.drawable.ic_snow;
+//        } else if (weatherId >= 701 && weatherId <= 741) {  //fog
+//            return R.drawable.ic_fog;
+//        } else if (weatherId == 741 || weatherId == 781) {  //  sand, dust
+//            return R.drawable.ic_storm;
+        } else if (weatherId == 800) {      //	clear sky
+            return R.mipmap.ic_weather_clear;
+//        } else if (weatherId == 801) {   	// few clouds
+//            return R.drawable.ic_light_clouds;
+        } else if (weatherId >= 802 && weatherId <= 804) {  //	cloudy
+            return R.mipmap.ic_weather_cloudy;
+        }
+        return R.mipmap.ic_launcher;
+    }
+
+
     public static String loadAssetTextAsString(Context context, String name) {
         BufferedReader in = null;
         try {
