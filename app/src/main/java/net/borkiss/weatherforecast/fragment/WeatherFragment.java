@@ -126,7 +126,9 @@ public class WeatherFragment extends Fragment {
         List<ForecastFiveDay> forecastFiveDayList = WeatherStation.getInstance(getActivity())
                 .getListForecastFiveDayByCityId(place.getCityId());
 
-        placeName.setText(place.getName() + " "+ new Date().toString());
+        placeName.setText(String.format(getString(R.string.format_place),
+                place.getName(), place.getCountry()+ " "+ new Date().toString()));
+
         //txtWeather.setText(weather.getWeatherMain());
         txtWeatherDescription.setText(weather.getWeatherDescription());
         txtDate.setText(Utils.formatDate(weather.getTime()));

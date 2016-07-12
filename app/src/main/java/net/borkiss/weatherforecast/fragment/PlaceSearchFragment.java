@@ -78,6 +78,7 @@ public class PlaceSearchFragment extends Fragment implements ApiCallback<List<Pl
 
         MenuItem searchItem = menu.findItem(R.id.menu_item_search);
         searchView = (SearchView) searchItem.getActionView();
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -92,7 +93,9 @@ public class PlaceSearchFragment extends Fragment implements ApiCallback<List<Pl
                 return false;
             }
         });
-
+        searchView.setQuery("",true);
+        searchView.setFocusable(true);
+        searchView.setIconified(false);
     }
 
     @Override
