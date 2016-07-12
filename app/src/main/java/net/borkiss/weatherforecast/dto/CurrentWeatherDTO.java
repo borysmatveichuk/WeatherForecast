@@ -38,6 +38,14 @@ public class CurrentWeatherDTO implements Serializable {
         return placeId;
     }
 
+    public int getWeatherConditionId() {
+        if (weather != null
+                && !weather.isEmpty()) {
+            return weather.get(0).id;
+        }
+        return 0;
+    }
+
     public String getWeatherMain() {
         if (weather != null
                 && !weather.isEmpty()) {
@@ -96,6 +104,7 @@ public class CurrentWeatherDTO implements Serializable {
     }
 
     public static class Weather {
+        int id;
         String main;
         String description;
     }

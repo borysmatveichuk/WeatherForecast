@@ -23,6 +23,7 @@ public class CurrentWeatherCursorWrapper extends CursorWrapper {
 
         int placeId = getInt(getColumnIndex(CurrentWeatherTable.Cols.PLACE_ID));
         long time = getLong(getColumnIndex(CurrentWeatherTable.Cols.TIME));
+        int conditionId = getInt(getColumnIndex(CurrentWeatherTable.Cols.CONDITION_ID));
         String weatherMine = getString(getColumnIndex(CurrentWeatherTable.Cols.WEATHER_MAIN));
         String weatherDescription = getString(getColumnIndex(CurrentWeatherTable.Cols.WEATHER_DESCRIPTION));
         float temperature = getFloat(getColumnIndex(CurrentWeatherTable.Cols.TEMPERATURE));
@@ -39,6 +40,7 @@ public class CurrentWeatherCursorWrapper extends CursorWrapper {
         CurrentWeather weather = new CurrentWeather();
         weather.setPlaceId(placeId);
         weather.setTime(new Date(time));
+        weather.setWeatherConditionId(conditionId);
         weather.setWeatherMain(weatherMine);
         weather.setWeatherDescription(weatherDescription);
         weather.setTemperature(temperature);

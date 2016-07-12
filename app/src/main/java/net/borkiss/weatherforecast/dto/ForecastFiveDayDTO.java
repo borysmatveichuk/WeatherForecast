@@ -55,6 +55,14 @@ public class ForecastFiveDayDTO implements Serializable {
         return "";
     }
 
+    public int getWeatherConditionId() {
+        if (weather != null
+                && !weather.isEmpty()) {
+            return weather.get(0).id;
+        }
+        return 0;
+    }
+
     public float getTemperature() {
         return mainIndicators.temp;
     }

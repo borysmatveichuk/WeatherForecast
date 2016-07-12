@@ -61,6 +61,7 @@ public class WeatherStation {
         ContentValues values = new ContentValues();
         values.put(ForecastFiveDayTable.Cols.TIME, forecast.getTime().getTime());
         values.put(ForecastFiveDayTable.Cols.PLACE_ID, forecast.getPlaceId());
+        values.put(ForecastFiveDayTable.Cols.CONDITION_ID, forecast.getWeatherConditionId());
         values.put(ForecastFiveDayTable.Cols.WEATHER_MAIN, forecast.getWeatherMain());
         values.put(ForecastFiveDayTable.Cols.WEATHER_DESCRIPTION, forecast.getWeatherDescription());
         values.put(ForecastFiveDayTable.Cols.TEMPERATURE, forecast.getTemperature());
@@ -78,6 +79,7 @@ public class WeatherStation {
         ContentValues values = new ContentValues();
         values.put(CurrentWeatherTable.Cols.TIME, weather.getTime().getTime());
         values.put(CurrentWeatherTable.Cols.PLACE_ID, weather.getPlaceId());
+        values.put(CurrentWeatherTable.Cols.CONDITION_ID, weather.getWeatherConditionId());
         values.put(CurrentWeatherTable.Cols.WEATHER_MAIN, weather.getWeatherMain());
         values.put(CurrentWeatherTable.Cols.WEATHER_DESCRIPTION, weather.getWeatherDescription());
         values.put(CurrentWeatherTable.Cols.TEMPERATURE, weather.getTemperature());
@@ -286,6 +288,7 @@ public class WeatherStation {
         String sql = "INSERT OR REPLACE INTO " + ForecastFiveDayTable.NAME + " ( " +
                 ForecastFiveDayTable.Cols.TIME + ", " +
                 ForecastFiveDayTable.Cols.PLACE_ID + ", " +
+                ForecastFiveDayTable.Cols.CONDITION_ID + ", " +
                 ForecastFiveDayTable.Cols.WEATHER_MAIN + ", " +
                 ForecastFiveDayTable.Cols.WEATHER_DESCRIPTION + ", " +
                 ForecastFiveDayTable.Cols.TEMPERATURE + ", " +
@@ -296,7 +299,7 @@ public class WeatherStation {
                 ForecastFiveDayTable.Cols.WIND_SPEED + ", " +
                 ForecastFiveDayTable.Cols.WIND_DEGREE + ", " +
                 ForecastFiveDayTable.Cols.CLOUDS +
-                " ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+                " ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 
         SQLiteStatement statement = database.compileStatement(sql);
 
@@ -307,16 +310,17 @@ public class WeatherStation {
 
                 statement.bindLong(1, forecast.getTime().getTime());
                 statement.bindLong(2, forecast.getPlaceId());
-                statement.bindString(3, forecast.getWeatherMain());
-                statement.bindString(4, forecast.getWeatherDescription());
-                statement.bindDouble(5, forecast.getTemperature());
-                statement.bindDouble(6, forecast.getPressure());
-                statement.bindLong(7, forecast.getHumidity());
-                statement.bindDouble(8, forecast.getMinTemperature());
-                statement.bindDouble(9, forecast.getMaxTemperature());
-                statement.bindDouble(10, forecast.getWindSpeed());
-                statement.bindDouble(11, forecast.getWindDegree());
-                statement.bindLong(12, forecast.getClouds());
+                statement.bindLong(3, forecast.getWeatherConditionId());
+                statement.bindString(4, forecast.getWeatherMain());
+                statement.bindString(5, forecast.getWeatherDescription());
+                statement.bindDouble(6, forecast.getTemperature());
+                statement.bindDouble(7, forecast.getPressure());
+                statement.bindLong(8, forecast.getHumidity());
+                statement.bindDouble(9, forecast.getMinTemperature());
+                statement.bindDouble(10, forecast.getMaxTemperature());
+                statement.bindDouble(11, forecast.getWindSpeed());
+                statement.bindDouble(12, forecast.getWindDegree());
+                statement.bindLong(13, forecast.getClouds());
 
                 statement.execute();
                 statement.clearBindings();

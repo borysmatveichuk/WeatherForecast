@@ -45,6 +45,7 @@ public enum DTOFactory {
         currentWeather.setPlaceId(dto.getPlaceId());
         currentWeather.setWeatherMain(dto.getWeatherMain());
         currentWeather.setWeatherDescription(dto.getWeatherDescription());
+        currentWeather.setWeatherConditionId(dto.getWeatherConditionId());
         currentWeather.setTemperature(dto.getTemperature());
         currentWeather.setPressure(dto.getPressure());
         currentWeather.setHumidity(dto.getHumidity());
@@ -66,6 +67,7 @@ public enum DTOFactory {
         ForecastFiveDay forecast = new ForecastFiveDay();
         forecast.setTime(dto.getTime());
         forecast.setPlaceId(dto.getPlaceId());
+        forecast.setWeatherConditionId(dto.getWeatherConditionId());
         forecast.setWeatherMain(dto.getWeatherMain());
         forecast.setWeatherDescription(dto.getWeatherDescription());
         forecast.setTemperature(dto.getTemperature());

@@ -7,6 +7,7 @@ public class WeatherDbSchema {
         public static final class Cols {
             public static final String PLACE_ID = "place";
             public static final String TIME = "time";
+            public static final String CONDITION_ID = "conditionId";
             public static final String WEATHER_MAIN = "weatherMain";
             public static final String WEATHER_DESCRIPTION = "weatherDescription";
             public static final String TEMPERATURE = "temperature";
@@ -28,6 +29,7 @@ public class WeatherDbSchema {
         public static final class Cols {
             public static final String PLACE_ID = "place";
             public static final String TIME = "time";
+            public static final String CONDITION_ID = "conditionId";
             public static final String WEATHER_MAIN = "weatherMain";
             public static final String WEATHER_DESCRIPTION = "weatherDescription";
             public static final String TEMPERATURE = "temperature";

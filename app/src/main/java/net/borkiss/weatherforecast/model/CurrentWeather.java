@@ -11,6 +11,7 @@ public class CurrentWeather implements Serializable {
     private int placeId;
     private String weatherMain;
     private String weatherDescription;
+    private int weatherConditionId;
     private float temperature;
     private float pressure;
     private int humidity;
@@ -52,6 +53,14 @@ public class CurrentWeather implements Serializable {
 
     public void setWeatherDescription(String weatherDescription) {
         this.weatherDescription = weatherDescription;
+    }
+
+    public int getWeatherConditionId() {
+        return weatherConditionId;
+    }
+
+    public void setWeatherConditionId(int weatherConditionId) {
+        this.weatherConditionId = weatherConditionId;
     }
 
     public float getTemperature() {

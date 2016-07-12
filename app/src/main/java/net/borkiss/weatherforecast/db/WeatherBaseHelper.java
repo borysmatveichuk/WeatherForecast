@@ -34,6 +34,7 @@ public class WeatherBaseHelper extends SQLiteOpenHelper {
                 " _id integer primary key autoincrement, " +
                 CurrentWeatherTable.Cols.PLACE_ID + " INTEGER , " +
                 CurrentWeatherTable.Cols.TIME + " INTEGER , " +
+                CurrentWeatherTable.Cols.CONDITION_ID + " INTEGER , " +
                 CurrentWeatherTable.Cols.WEATHER_MAIN + ", " +
                 CurrentWeatherTable.Cols.WEATHER_DESCRIPTION + ", " +
                 CurrentWeatherTable.Cols.TEMPERATURE + " REAL , " +
@@ -53,6 +54,7 @@ public class WeatherBaseHelper extends SQLiteOpenHelper {
                 " _id integer primary key autoincrement, " +
                 ForecastFiveDayTable.Cols.PLACE_ID + " INTEGER , " +
                 ForecastFiveDayTable.Cols.TIME + ", " +
+                CurrentWeatherTable.Cols.CONDITION_ID + " INTEGER , " +
                 CurrentWeatherTable.Cols.WEATHER_MAIN + ", " +
                 CurrentWeatherTable.Cols.WEATHER_DESCRIPTION + ", " +
                 CurrentWeatherTable.Cols.TEMPERATURE + " REAL , " +

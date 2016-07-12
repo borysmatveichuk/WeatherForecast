@@ -23,6 +23,7 @@ public class ForecastFiveDayCursorWrapper extends CursorWrapper {
 
         int placeId = getInt(getColumnIndex(ForecastFiveDayTable.Cols.PLACE_ID));
         long time = getLong(getColumnIndex(ForecastFiveDayTable.Cols.TIME));
+        int conditionId = getInt(getColumnIndex(ForecastFiveDayTable.Cols.CONDITION_ID));
         String weatherMine = getString(getColumnIndex(ForecastFiveDayTable.Cols.WEATHER_MAIN));
         String weatherDescription = getString(getColumnIndex(ForecastFiveDayTable.Cols.WEATHER_DESCRIPTION));
         float temperature = getFloat(getColumnIndex(ForecastFiveDayTable.Cols.TEMPERATURE));
@@ -37,6 +38,7 @@ public class ForecastFiveDayCursorWrapper extends CursorWrapper {
         ForecastFiveDay forecast = new ForecastFiveDay();
         forecast.setPlaceId(placeId);
         forecast.setTime(new Date(time));
+        forecast.setWeatherConditionId(conditionId);
         forecast.setWeatherMain(weatherMine);
         forecast.setWeatherDescription(weatherDescription);
         forecast.setTemperature(temperature);
