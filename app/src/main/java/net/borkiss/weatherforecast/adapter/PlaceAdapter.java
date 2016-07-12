@@ -5,12 +5,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.borkiss.weatherforecast.R;
-import net.borkiss.weatherforecast.api.WeatherStation;
 import net.borkiss.weatherforecast.model.Place;
 
 import java.util.List;
@@ -55,25 +52,24 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceHolder>
         this.places = places;
     }
 
+    protected Context getContext() {
+        return context;
+    }
+
     public class PlaceHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView placeName;
-        private TextView placeCountry;
-        private Button delete;
 
         public PlaceHolder(View itemView) {
             super(itemView);
 
             placeName = (TextView) itemView.findViewById(R.id.txtPlaceName);
-            placeCountry = (TextView) itemView.findViewById(R.id.txtPlaceCountry);
-            delete = (Button) itemView.findViewById(R.id.btnDelete);
-            delete.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }
 
         public void bind(Place place) {
-            placeName.setText(place.getName());
-            placeCountry.setText(place.getCountry());
+            placeName.setText(String.format(context.getString(R.string.format_place),
+                    place.getName(), place.getCountry()));
         }
 
         @Override

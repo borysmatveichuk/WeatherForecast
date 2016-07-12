@@ -4,7 +4,9 @@
     <string name="add_city">Add city</string>
     <string name="edit">Edit</string>
     <string name="add">Add</string>
+    <string name="delete">Delete</string>
     <string name="about">About</string>
+    <string name="format_place">%1$s, %2$s</string>
     <string name="format_temperature">%1.0f\u00B0</string>
     <string name="format_temperature_min_max">%1$s | %2$s</string>
     <string name="format_wind">%1$1.0f m/s %2$s</string>

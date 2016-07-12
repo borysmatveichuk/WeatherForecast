@@ -2,8 +2,6 @@ package net.borkiss.weatherforecast.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +16,7 @@ import android.widget.Toast;
 
 import net.borkiss.weatherforecast.R;
 import net.borkiss.weatherforecast.adapter.DividerItemDecoration;
+import net.borkiss.weatherforecast.adapter.EditPlaceAdapter;
 import net.borkiss.weatherforecast.adapter.PlaceAdapter;
 import net.borkiss.weatherforecast.api.WeatherStation;
 import net.borkiss.weatherforecast.model.Place;
@@ -28,10 +27,9 @@ import java.util.List;
 public class PlaceListFragment extends Fragment implements MenuItem.OnMenuItemClickListener {
 
     private static final String TAG = PlaceListFragment.class.getSimpleName();
-    private Handler handler = new Handler(Looper.getMainLooper());
 
     private RecyclerView recyclerView;
-    private PlaceAdapter adapter;
+    private EditPlaceAdapter adapter;
     private List<Place> places;
 
     public static PlaceListFragment newInstance() {
@@ -78,7 +76,7 @@ public class PlaceListFragment extends Fragment implements MenuItem.OnMenuItemCl
         places = WeatherStation.getInstance(getActivity()).getPlaces();
 
         if (adapter == null) {
-            adapter = new PlaceAdapter(getActivity(), places);
+            adapter = new EditPlaceAdapter(getActivity(), places);
             recyclerView.setAdapter(adapter);
             adapter.setOnItemClickListener(new PlaceAdapter.OnItemClickListener() {
                 @Override
@@ -86,6 +84,7 @@ public class PlaceListFragment extends Fragment implements MenuItem.OnMenuItemCl
                     switch (view.getId()) {
                         case R.id.btnDelete:
                             WeatherStation.getInstance(getActivity()).deletePlace(places.get(position));
+                            updateUI();
                             break;
                         default:
                             Toast.makeText(getActivity(), "Place is " + places.get(position).getName(), Toast.LENGTH_SHORT).show();
@@ -107,7 +106,6 @@ public class PlaceListFragment extends Fragment implements MenuItem.OnMenuItemCl
         inflater.inflate(R.menu.fragment_place_list, menu);
 
         menu.findItem(R.id.menu_item_add).setOnMenuItemClickListener(this);
-        menu.findItem(R.id.menu_item_edit).setOnMenuItemClickListener(this);
     }
 
     @Override
@@ -119,12 +117,8 @@ public class PlaceListFragment extends Fragment implements MenuItem.OnMenuItemCl
                 Intent intent = PlacesActivity.newIntent(getActivity(), PlacesActivity.TYPE.ADD);
                 startActivity(intent);
                 return true;
-
-            case R.id.menu_item_edit:
-
-                Toast.makeText(getActivity(), "edit", Toast.LENGTH_SHORT).show();
-                return true;
         }
+
         return false;
     }
 }

@@ -37,6 +37,7 @@ public class PlaceSearchFragment extends Fragment implements ApiCallback<List<Pl
 
     private RecyclerView recyclerView;
     private PlaceAdapter adapter;
+    private SearchView searchView;
 
     public static PlaceSearchFragment newInstance() {
 
@@ -76,7 +77,7 @@ public class PlaceSearchFragment extends Fragment implements ApiCallback<List<Pl
         inflater.inflate(R.menu.fragment_search_place, menu);
 
         MenuItem searchItem = menu.findItem(R.id.menu_item_search);
-        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -115,8 +116,9 @@ public class PlaceSearchFragment extends Fragment implements ApiCallback<List<Pl
                     public void onItemClick(View view, int position) {
 
                         if (WeatherStation.getInstance(getActivity()).getPlaceByCityId(places.get(position).getCityId()) == null) {
-                            Toast.makeText(getActivity(), "Place will be added to db " + places.get(position).getName(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Place "+ places.get(position).getName() + " will be added.", Toast.LENGTH_SHORT).show();
                             WeatherStation.getInstance(getActivity()).addPlace(places.get(position));
+                            searchView.setQuery(null, false);
                         }
                     }
                 });
