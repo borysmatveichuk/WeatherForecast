@@ -16,7 +16,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <TextView
@@ -62,7 +62,7 @@
 
                         <TextView
                             android:id="@+id/txtWeather"
-                            android:textAppearance="?android:textAppearanceLarge"
+                            android:textAppearance="?android:textAppearanceMedium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:visibility="gone"
@@ -76,7 +76,7 @@
                             tools:src="@mipmap/ic_weather_cloudy"/>
                         <TextView
                             android:id="@+id/txtWeatherDescription"
-                            android:textAppearance="?android:textAppearanceLarge"
+                            android:textAppearance="?android:textAppearanceMedium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             tools:text="Current weather" />
@@ -89,13 +89,15 @@
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="-1dp"
+                    android:baselineAligned="false">
+
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="33"
-                        android:orientation="vertical"
-                        android:background="@drawable/customborder">
+                        android:orientation="vertical">
 
                         <TextView
                             style="@style/NormalText.Bold"
@@ -137,8 +139,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="33"
-                        android:orientation="vertical"
-                        android:background="@drawable/customborder">
+                        android:orientation="vertical">
 
                         <TextView
                             style="@style/NormalText.Bold"
@@ -178,8 +179,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="34"
-                        android:orientation="vertical"
-                        android:background="@drawable/customborder">
+                        android:orientation="vertical">
 
                         <TextView
                             style="@style/NormalText.Bold"
