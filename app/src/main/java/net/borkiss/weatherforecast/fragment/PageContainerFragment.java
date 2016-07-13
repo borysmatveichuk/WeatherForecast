@@ -35,7 +35,6 @@ public class PageContainerFragment extends Fragment {
 
     private List<Place> places;
     private ViewPager viewPager;
-    private FragmentStatePagerAdapter adapter;
     private ResultReceiver resultReceiver;
 
     public static PageContainerFragment newInstance() {
@@ -84,23 +83,18 @@ public class PageContainerFragment extends Fragment {
 
         places = WeatherStation.getInstance(getActivity()).getPlaces();
 
-        //if (adapter == null) {
-            adapter = new FragmentStatePagerAdapter(getChildFragmentManager()) {
-                @Override
-                public Fragment getItem(int position) {
-                    return WeatherFragment.newInstance(places.get(position));
-                }
+        FragmentStatePagerAdapter adapter = new FragmentStatePagerAdapter(getChildFragmentManager()) {
+            @Override
+            public Fragment getItem(int position) {
+                return WeatherFragment.newInstance(places.get(position));
+            }
 
-                @Override
-                public int getCount() {
-                    return places.size();
-                }
-            };
-            viewPager.setAdapter(adapter);
-        //} else {
-        //    adapter.notifyDataSetChanged();
-        //}
-
+            @Override
+            public int getCount() {
+                return places.size();
+            }
+        };
+        viewPager.setAdapter(adapter);
     }
 
     @Override
@@ -138,7 +132,7 @@ public class PageContainerFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REQUEST_PLACES) {
+        if (requestCode == REQUEST_PLACES) {
             Intent intent = WeatherService.newIntent(getActivity());
             getActivity().startService(intent);
 
