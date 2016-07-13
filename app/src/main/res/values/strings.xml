@@ -2,6 +2,7 @@
     <string name="app_name">Weather Forecast</string>
     <string name="find_city">Find city</string>
     <string name="add_city">Add city</string>
+    <string name="send">Send</string>
     <string name="edit">Edit</string>
     <string name="add">Add</string>
     <string name="delete">Delete</string>
@@ -15,6 +16,8 @@
     <string name="format_clouds">%d %%</string>
     <string name="format_sunrise_sunset">%1$s | %2$s</string>
     <string name="place_activity_title">Locations</string>
+    <string name="weather_report_subject">Weather forecast</string>
+    <string name="send_report">Send weather report via</string>
 
     <string name="title_temperature_min_max">Min | Max</string>
     <string name="title_wind">Wind</string>

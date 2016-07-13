@@ -1,13 +1,18 @@
 package net.borkiss.weatherforecast.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,6 +25,7 @@ import net.borkiss.weatherforecast.api.WeatherStation;
 import net.borkiss.weatherforecast.model.CurrentWeather;
 import net.borkiss.weatherforecast.model.ForecastFiveDay;
 import net.borkiss.weatherforecast.model.Place;
+import net.borkiss.weatherforecast.ui.PlacesActivity;
 import net.borkiss.weatherforecast.util.Utils;
 
 import java.util.Date;
@@ -64,6 +70,7 @@ public class WeatherFragment extends Fragment {
         if (getArguments() != null) {
             place = (Place) getArguments().getSerializable(ARG_PLACE_ID);
         }
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -106,29 +113,53 @@ public class WeatherFragment extends Fragment {
             }
         });
 
+        Log.d(TAG, "onViewCreated");
     }
 
     @Override
     public void onResume() {
         super.onResume();
         updateUI();
+        Log.d(TAG, "onResume");
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(TAG, "on Start " + place.getName());
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_weather, menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_share:
+                Intent intent = ShareCompat.IntentBuilder.from(getActivity())
+                        .setType("text/plain")
+                        .setText(getWeatherReport())
+                        .setSubject(getString(R.string.weather_report_subject))
+                        .getIntent();
+                startActivity(Intent.createChooser(intent, getActivity().getString(R.string.send_report)));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
     private void updateUI() {
+
         CurrentWeather weather = WeatherStation.getInstance(getActivity())
                 .getCurrentWeatherByCityId(place.getCityId());
 
         List<ForecastFiveDay> forecastFiveDayList = WeatherStation.getInstance(getActivity())
                 .getListForecastFiveDayByCityId(place.getCityId());
 
+        Log.d(TAG, "updateUI " + place.getCityId() + " " + place.getName());
+        Log.d(TAG, "Forecast is " + forecastFiveDayList);
+        Log.d(TAG, "Weather is " + weather);
+
         placeName.setText(String.format(getString(R.string.format_place),
-                place.getName(), place.getCountry()+ " "+ new Date().toString()));
+                place.getName(), place.getCountry()));
 
         txtWeatherDescription.setText(weather.getWeatherDescription());
         txtDate.setText(Utils.formatDate(weather.getTime()));
@@ -179,4 +210,8 @@ public class WeatherFragment extends Fragment {
         }
     }
 
+    private String getWeatherReport() {
+        return WeatherStation.getInstance(getActivity())
+                .getCurrentWeatherByCityId(place.getCityId()).toString();
+    }
 }
