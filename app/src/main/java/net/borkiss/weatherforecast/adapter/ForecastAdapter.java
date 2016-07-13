@@ -58,6 +58,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
         private TextView txtTime;
         private ImageView imgWeatherIcon;
+        private TextView txtWeather;
         private TextView txtTemperature;
 
         public ForecastHolder(View itemView) {
@@ -65,13 +66,22 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
             txtTime = (TextView) itemView.findViewById(R.id.txtTime);
             imgWeatherIcon = (ImageView) itemView.findViewById(R.id.imgWeatherIcon);
+            txtWeather = (TextView) itemView.findViewById(R.id.txtWeather);
+            txtWeather.setVisibility(View.GONE);
             txtTemperature = (TextView) itemView.findViewById(R.id.txtTemperature);
         }
 
         public void bind(ForecastFiveDay forecast) {
             txtTime.setText(Utils.formatTime(forecast.getTime()));
-            imgWeatherIcon.setImageResource(Utils.getIconResourceForWeatherCondition(
-                    forecast.getWeatherConditionId()));
+            int iconId = Utils.getIconResourceForWeatherCondition(
+                    forecast.getWeatherConditionId());
+            if (iconId >= 0) {
+                imgWeatherIcon.setImageResource(iconId);
+                txtWeather.setVisibility(View.GONE);
+            } else {
+                imgWeatherIcon.setVisibility(View.GONE);
+                txtWeather.setVisibility(View.VISIBLE);
+            }
             txtTemperature.setText(Utils.formatTemperature(context, forecast.getTemperature()));
         }
 

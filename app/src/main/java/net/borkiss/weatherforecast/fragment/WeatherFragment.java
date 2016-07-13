@@ -33,7 +33,7 @@ public class WeatherFragment extends Fragment {
     private Place place;
     private TextView placeName;
     private ImageView imgWeatherIcon;
-    //private TextView txtWeather;
+    private TextView txtWeather;
     private TextView txtWeatherDescription;
     private TextView txtDate;
     private TextView txtTemperature;
@@ -78,7 +78,8 @@ public class WeatherFragment extends Fragment {
         placeName = (TextView) view.findViewById(R.id.txtPlace);
         placeName.setText(place.getName());
 
-        //txtWeather = (TextView) view.findViewById(R.id.txtWeather);
+        txtWeather = (TextView) view.findViewById(R.id.txtWeather);
+        txtWeather.setVisibility(View.GONE);
         txtWeatherDescription = (TextView) view.findViewById(R.id.txtWeatherDescription);
         imgWeatherIcon = (ImageView) view.findViewById(R.id.imgWeatherIcon);
         txtDate = (TextView) view.findViewById(R.id.txtDate);
@@ -129,12 +130,20 @@ public class WeatherFragment extends Fragment {
         placeName.setText(String.format(getString(R.string.format_place),
                 place.getName(), place.getCountry()+ " "+ new Date().toString()));
 
-        //txtWeather.setText(weather.getWeatherMain());
         txtWeatherDescription.setText(weather.getWeatherDescription());
         txtDate.setText(Utils.formatDate(weather.getTime()));
 
-        imgWeatherIcon.setImageResource(Utils.getIconResourceForWeatherCondition(
-                weather.getWeatherConditionId()));
+        int iconId = Utils.getIconResourceForWeatherCondition(
+                weather.getWeatherConditionId());
+        if (iconId >= 0) {
+            imgWeatherIcon.setImageResource(Utils.getIconResourceForWeatherCondition(
+                    weather.getWeatherConditionId()));
+            txtWeather.setVisibility(View.GONE);
+        } else {
+            imgWeatherIcon.setVisibility(View.GONE);
+            txtWeather.setVisibility(View.VISIBLE);
+            txtWeather.setText(weather.getWeatherMain());
+        }
 
         String temperature = Utils.formatTemperature(getActivity(), weather.getTemperature());
         txtTemperature.setText(temperature);

@@ -60,6 +60,14 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
+                        <TextView
+                            android:id="@+id/txtWeather"
+                            android:textAppearance="?android:textAppearanceLarge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            tools:text="Weather" />
+
                         <ImageView
                             android:id="@+id/imgWeatherIcon"
                             android:layout_width="wrap_content"
