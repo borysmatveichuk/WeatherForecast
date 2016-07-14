@@ -50,6 +50,8 @@ public class WeatherFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private ForecastAdapter adapter;
+    private CurrentWeather weather;
+    private List<ForecastFiveDay> forecastFiveDayList;
 
 
     public static WeatherFragment newInstance(Place place) {
@@ -146,10 +148,10 @@ public class WeatherFragment extends Fragment {
 
     private void updateUI() {
 
-        CurrentWeather weather = WeatherStation.getInstance(getActivity())
+        weather = WeatherStation.getInstance(getActivity())
                 .getCurrentWeatherByCityId(place.getCityId());
 
-        List<ForecastFiveDay> forecastFiveDayList = WeatherStation.getInstance(getActivity())
+        forecastFiveDayList = WeatherStation.getInstance(getActivity())
                 .getListForecastFiveDayByCityId(place.getCityId());
 
         Log.d(TAG, "updateUI " + place.getCityId() + " " + place.getName());
@@ -209,7 +211,25 @@ public class WeatherFragment extends Fragment {
     }
 
     private String getWeatherReport() {
-        return WeatherStation.getInstance(getActivity())
-                .getCurrentWeatherByCityId(place.getCityId()).toString();
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format(getString(R.string.format_place),
+                place.getName(), place.getCountry()));
+        sb.append(" ");
+        sb.append(Utils.formatDate(weather.getTime()));
+        sb.append("\n");
+        sb.append(String.format(getString(R.string.format_place),
+                weather.getWeatherMain(), weather.getWeatherDescription()));
+        sb.append("\n");
+        sb.append(Utils.formatTemperature(getActivity(), weather.getTemperature()));
+        sb.append("\n");
+        sb.append(getString(R.string.title_wind));
+        sb.append(": ");
+        sb.append(Utils.getFormattedWind(getActivity(),
+                weather.getWindSpeed(), weather.getWindDegree()));
+
+        return sb.toString();
+
     }
 }
