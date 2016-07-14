@@ -35,7 +35,7 @@ public class WeatherService extends IntentService {
 
     private static final String TAG = WeatherService.class.getSimpleName();
 
-    public static final int INTERVAL = 1000 * 60 * 10; // 15 MINUTES
+    public static final int INTERVAL = 1000 * 60 * 15; // 15 MINUTES
     public static final int STATUS_FINISHED = 1;
 
     private static final int ID_NOTIF = 1;
@@ -78,15 +78,6 @@ public class WeatherService extends IntentService {
 
                 int count = instance.addListFiveDayForecast(forecastList);
 
-                /*
-                int count = 0;
-
-                for (ForecastFiveDay forecast : forecastList) {
-                    instance.addForecastFiveDay(forecast);
-                    count++;
-                }
-                */
-
                 if (count > 0) {
                     Log.d(TAG, "Added forecast " + count + " record(s) to DB.");
                 } else {
@@ -103,7 +94,6 @@ public class WeatherService extends IntentService {
     };
 
     private WeatherStation instance;
-    private NotificationManager nm;
 
     public static Intent newIntent(Context context, ResultReceiver resultReceiver) {
         Intent intent = new Intent(context, WeatherService.class);
@@ -129,7 +119,6 @@ public class WeatherService extends IntentService {
         super.onCreate();
         setIntentRedelivery(true);
         instance = WeatherStation.getInstance(this);
-        nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
 
     @Override
@@ -155,7 +144,6 @@ public class WeatherService extends IntentService {
         if (receiver != null)
             receiver.send(STATUS_FINISHED, Bundle.EMPTY);
 
-        sendNotification();
     }
 
     private boolean isNetworkAvailableAndConnected() {
@@ -181,35 +169,11 @@ public class WeatherService extends IntentService {
         AlarmManager alarmManager = (AlarmManager)
                 context.getSystemService(Context.ALARM_SERVICE);
         if (isOn) {
-            //alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
             alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME,
                     SystemClock.elapsedRealtime(), INTERVAL, pi);
         } else {
             alarmManager.cancel(pi);
             pi.cancel();
         }
-    }
-
-    private void sendNotification() {
-
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-        int notifDefaultsSettings = Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS;
-
-        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
-
-        Notification notif = new Notification.Builder(getApplicationContext())
-                .setContentTitle(getApplicationContext().getResources().getString(R.string.app_name))
-                .setContentText("Get forecast")
-                .setContentIntent(pIntent)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.mipmap.ic_launcher))
-                .setAutoCancel(true)
-                .setWhen(System.currentTimeMillis())
-                .setDefaults(notifDefaultsSettings)
-                .getNotification();
-
-        nm.notify(ID_NOTIF, notif);
     }
 }

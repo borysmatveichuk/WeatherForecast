@@ -1,19 +1,11 @@
 package net.borkiss.weatherforecast.ui;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import net.borkiss.weatherforecast.R;
-import net.borkiss.weatherforecast.api.URIBuildHelper;
-import net.borkiss.weatherforecast.api.WeatherApi;
-import net.borkiss.weatherforecast.api.WeatherStation;
 import net.borkiss.weatherforecast.fragment.PageContainerFragment;
 
 public class MainActivity extends AppCompatActivity {

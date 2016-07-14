@@ -8,8 +8,6 @@ import net.borkiss.weatherforecast.dto.JSONAdapterFactory;
 import net.borkiss.weatherforecast.dto.PlaceDTO;
 import net.borkiss.weatherforecast.dto.WrapperForecastFiveDayDTO;
 import net.borkiss.weatherforecast.dto.WrapperSearchResultDTO;
-import net.borkiss.weatherforecast.util.Utils;
-import net.borkiss.weatherforecast.util.WeatherApplication;
 
 import java.util.List;
 

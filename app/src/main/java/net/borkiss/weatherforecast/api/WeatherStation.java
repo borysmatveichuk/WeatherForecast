@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
-import android.provider.BaseColumns;
 import android.util.Log;
 
 import net.borkiss.weatherforecast.db.CurrentWeatherCursorWrapper;
@@ -15,14 +14,12 @@ import net.borkiss.weatherforecast.db.WeatherBaseHelper;
 import net.borkiss.weatherforecast.db.WeatherDbSchema.CurrentWeatherTable;
 import net.borkiss.weatherforecast.db.WeatherDbSchema.ForecastFiveDayTable;
 import net.borkiss.weatherforecast.db.WeatherDbSchema.PlacesTable;
-import net.borkiss.weatherforecast.dto.ForecastFiveDayDTO;
 import net.borkiss.weatherforecast.model.CurrentWeather;
 import net.borkiss.weatherforecast.model.ForecastFiveDay;
 import net.borkiss.weatherforecast.model.Place;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Inflater;
 
 public class WeatherStation {
 

@@ -2,8 +2,6 @@ package net.borkiss.weatherforecast.dto;
 
 import com.google.gson.reflect.TypeToken;
 
-import net.borkiss.weatherforecast.model.CurrentWeather;
-
 import java.lang.reflect.Type;
 import java.util.List;
 

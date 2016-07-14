@@ -12,10 +12,6 @@ import net.borkiss.weatherforecast.R;
 import net.borkiss.weatherforecast.fragment.PlaceListFragment;
 import net.borkiss.weatherforecast.fragment.PlaceSearchFragment;
 
-/***
- *
- */
-
 public class PlacesActivity extends AppCompatActivity {
 
     private static final String EXTRA_TYPE = "fragmentType";

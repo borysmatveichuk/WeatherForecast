@@ -25,10 +25,8 @@ import net.borkiss.weatherforecast.api.WeatherStation;
 import net.borkiss.weatherforecast.model.CurrentWeather;
 import net.borkiss.weatherforecast.model.ForecastFiveDay;
 import net.borkiss.weatherforecast.model.Place;
-import net.borkiss.weatherforecast.ui.PlacesActivity;
 import net.borkiss.weatherforecast.util.Utils;
 
-import java.util.Date;
 import java.util.List;
 
 public class WeatherFragment extends Fragment {

@@ -20,9 +20,9 @@ public class URIBuildHelper {
 
     public static final String SERVER = QA_SERVER;
 
-    private final static String API_KEY = "46c8b7efcac89c7a3f1b4e463e6fe010";
+    private static final String API_KEY = "46c8b7efcac89c7a3f1b4e463e6fe010";
 
-    private static String DATA_SECTION = "data/2.5";
+    private static final String DATA_SECTION = "data/2.5";
 
     private static final String KEY_CURRENT_WEATHER = "weather";
     private static final String KEY_FIVE_DAY_WEATHER = "forecast";
