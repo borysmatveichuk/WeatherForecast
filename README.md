@@ -17,5 +17,4 @@ Weather forecast based on data from [http://openweathermap.org/](Link URL)
 
 *   'junit:junit:4.12'
 *   'com.android.support.test: runner:0.3'
-
-![Screenshot_20160714-160638.png](https://bitbucket.org/repo/aMLdKb/images/2086917970-Screenshot_20160714-160638.png)
+![Screenshot_20160714-160638.png](https://bitbucket.org/repo/aMLdKb/images/3602646556-Screenshot_20160714-160638.png)
