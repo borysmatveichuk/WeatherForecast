@@ -1,8 +1,6 @@
 # README #
 
-### Test job ###
-
-Weather forecast based on data from [http://openweathermap.org/]
+## Weather forecast based on data from [http://openweathermap.org/]
 
 ![Screenshot_20160714-160638.png](https://bitbucket.org/repo/aMLdKb/images/3602646556-Screenshot_20160714-160638.png)
 
