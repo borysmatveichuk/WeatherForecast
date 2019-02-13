@@ -1,5 +1,6 @@
 package net.borkiss.weatherforecast.service;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
@@ -121,6 +122,7 @@ public class WeatherService extends IntentService {
         instance = WeatherStation.getInstance(this);
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onHandleIntent(Intent intent) {
 

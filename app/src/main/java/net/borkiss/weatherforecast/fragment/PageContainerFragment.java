@@ -4,11 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import android.support.v4.os.ResultReceiver;
-import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -151,7 +151,7 @@ public class PageContainerFragment extends Fragment {
                 >= WeatherService.INTERVAL);
     }
 
-    @SuppressLint("ParcelCreator")
+    @SuppressLint({"RestrictedApi", "ParcelCreator"})
     private class ServiceResultReceiver extends ResultReceiver {
 
         /**
@@ -161,13 +161,14 @@ public class PageContainerFragment extends Fragment {
          *
          * @param handler
          */
+
         public ServiceResultReceiver(Handler handler) {
             super(handler);
         }
 
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
-            super.onReceiveResult(resultCode, resultData);
+            //super.onReceiveResult(resultCode, resultData);
             Log.d(TAG, "Received result from service: " + resultCode);
             updateUI();
         }
